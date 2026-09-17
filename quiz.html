@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模拟测验 - LMCC学习中心</title>
+  <meta name="description" content="LMCC认证模拟测验系统，包含第一轮全部真题和第二轮知识点测验">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <span class="logo">L</span>
+      <span>LMCC 学习中心</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="round1.html">第一轮备考</a>
+      <a href="round2.html">第二轮备考</a>
+      <a href="knowledge.html">知识库</a>
+      <a href="quiz.html">模拟测验</a>
+    </div>
+    <button class="nav-toggle">☰</button>
+  </nav>
+
+  <div class="main-content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="container">
+        <h1>模拟测验</h1>
+        <p>选择类别开始在线答题，即时反馈答案与解析</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="content-section">
+        <div class="info-box info">
+          <span class="icon">i</span>
+          <div class="content">
+            <strong>测验说明</strong>
+            <p>每次测验包含一组题目，选择答案后立即显示正确答案和详细解析。支持上一题/下一题导航，完成后显示总成绩和答题回顾。建议多次练习，确保每个知识点都理解透彻。</p>
+          </div>
+        </div>
+
+        <div class="quiz-container" id="quiz-content">
+          <!-- Questions will be rendered here by quiz.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>LMCC 学习中心</h4>
+          <p>大模型编程认证备考学习平台</p>
+        </div>
+        <div>
+          <h4>学习导航</h4>
+          <p><a href="round1.html">第一轮备考</a></p>
+          <p><a href="round2.html">第二轮备考</a></p>
+          <p><a href="knowledge.html">知识库</a></p>
+          <p><a href="quiz.html">模拟测验</a></p>
+        </div>
+        <div>
+          <h4>技术参考</h4>
+          <p><a href="https://pytorch.org" target="_blank">PyTorch 文档</a></p>
+          <p><a href="https://huggingface.co/docs/transformers" target="_blank">Transformers 文档</a></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>LMCC Study Center | 基于真题制作 | 仅供学习交流</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/quiz-data.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

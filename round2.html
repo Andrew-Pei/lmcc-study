@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第二轮备考 - LMCC学习中心</title>
+  <meta name="description" content="LMCC第二轮编程实践备考，T1小小数学助手和T2多样性数据生成与相似度计算详解">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <span class="logo">L</span>
+      <span>LMCC 学习中心</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="round1.html">第一轮备考</a>
+      <a href="round2.html">第二轮备考</a>
+      <a href="knowledge.html">知识库</a>
+      <a href="quiz.html">模拟测验</a>
+    </div>
+    <button class="nav-toggle">☰</button>
+  </nav>
+
+  <div class="main-content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="container">
+        <h1>第二轮：编程实践</h1>
+        <p>T1 小小数学助手 + T2 多样性数据生成与相似度计算，各100分</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Overview -->
+      <div class="content-section">
+        <div class="info-box info">
+          <span class="icon">i</span>
+          <div class="content">
+            <strong>第二轮考试说明</strong>
+            <p>第二轮为编程实践考核，包含两道编程题。考生需要在<code class="inline">submission.py</code>文件中完成指定函数，评测程序<code class="inline">evaluate.py</code>不可修改。考试使用Qwen3系列模型，需要PyTorch和Transformers库。</p>
+          </div>
+        </div>
+
+        <div class="info-box warning">
+          <span class="icon">!</span>
+          <div class="content">
+            <strong>修改规则</strong>
+            <p>只能修改 submission.py 中标注的"考生实现区域"。可以新增少量辅助函数。不得修改 evaluate.py。不得在函数中做答案后处理。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- T1 Section -->
+      <div class="content-section">
+        <h2>T1：小小数学助手</h2>
+
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon orange">60</div>
+            <h3>阶段一：单条推理</h3>
+            <p>8道数学题，逐条调用generate_single。每题10分，答对≥6题给满分60分。</p>
+            <span class="tag orange">generate_single</span>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">40</div>
+            <h3>阶段二：批量推理</h3>
+            <p>32道数学题，调用generate_batch批量推理。每题1.5分，满分40分。</p>
+            <span class="tag orange">generate_batch</span>
+          </div>
+        </div>
+
+        <h3>故事背景</h3>
+        <p>你来到小学帮助小朋友学数学。孩子们每天都会来问你各种数学题。小朋友们写题目时非常"自由"——有的写正常的<code class="inline">+</code>、<code class="inline">-</code>，有的画奇怪的符号（<code class="inline">⊕</code>、<code class="inline">－</code>、<code class="inline">➕</code>、<code class="inline">➖</code>），甚至用中文"加""减"。</p>
+        <p>你需要编写一个基于PyTorch和Transformers的小小数学助手，让它能理解各种符号并用统一格式回答。</p>
+
+        <h3>三个核心函数</h3>
+
+        <h4>函数1：build_system_prompt()</h4>
+        <p>定义system prompt，引导模型识别各种数学符号并按<code class="inline">[Answer]: 数值</code>格式输出。</p>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>submission.py</span></div>
+          <pre><code>def build_system_prompt() -> str:
+    """
+    定义 system prompt
+    - 返回一个 system prompt，要求模型以"[Answer]: "的单行格式给出最终数值。
+    """
+    return """你是一个精确的数学计算助手。请按照以下步骤严格计算并返回准确的最终数值。
+
+【计算步骤】
+步骤1 - 符号转换：
+   - 将问题中的所有符号转换为标准数学符号
+   - ＋, ➕, ⊕, 加 → +
+   - －, 减 → -
+   - ×, *, 乘 → ×
+   - ÷, /, 除 → ÷
+   - ⊕ 不是异或运算，就是普通加法 +
+
+步骤2 - 分步计算：
+   - 按照运算优先级逐步计算
+
+步骤3 - 输出答案：
+   - 使用格式：[Answer]: 数值
+   - 整数直接输出，确保计算准确
+"""</code></pre>
+        </div>
+
+        <div class="info-box success">
+          <span class="icon">✓</span>
+          <div class="content">
+            <strong>Prompt设计要点</strong>
+            <p>1. 明确角色：数学计算助手<br>2. 定义符号转换规则：让模型理解各种非标准符号<br>3. 要求分步计算：利用思维链提高准确性<br>4. 严格格式约束：[Answer]: 数值</p>
+          </div>
+        </div>
+
+        <h4>函数2：apply_chat_template_single()</h4>
+        <p>使用tokenizer将system prompt和用户问题组合成模型输入文本。</p>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>submission.py</span></div>
+          <pre><code>def apply_chat_template_single(
+    tokenizer: AutoTokenizer,
+    system_prompt: str,
+    problem: str,
+) -> str:
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": problem},
+    ]
+    rendered = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True,
+        enable_thinking=True,  # 启用思考模式
+    )
+    return rendered</code></pre>
+        </div>
+
+        <div class="info-box info">
+          <span class="icon">i</span>
+          <div class="content">
+            <strong>关键参数说明</strong>
+            <p><code class="inline">tokenize=False</code>：返回文本字符串而非token id<br><code class="inline">add_generation_prompt=True</code>：添加生成提示符<br><code class="inline">enable_thinking=True</code>：启用Qwen3的思考模式，让模型先推理再输出答案</p>
+          </div>
+        </div>
+
+        <h4>函数3：generate_single() - 单条推理</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>submission.py</span></div>
+          <pre><code>def generate_single(
+    model: AutoModelForCausalLM,
+    tokenizer: AutoTokenizer,
+    rendered_text: str,
+    max_new_tokens: int,
+    do_sample: bool,
+) -> torch.Tensor:
+    # 1. tokenize 输入
+    inputs = tokenizer(rendered_text, return_tensors="pt", padding=True).to(model.device)
+
+    # 2. 生成输出
+    outputs = model.generate(
+        input_ids=inputs["input_ids"],
+        attention_mask=inputs.get("attention_mask"),
+        max_new_tokens=max_new_tokens,
+        do_sample=do_sample,
+        eos_token_id=tokenizer.eos_token_id,
+        pad_token_id=tokenizer.pad_token_id,
+    )
+
+    return outputs</code></pre>
+        </div>
+
+        <h4>函数4：generate_batch() - 批量推理</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>submission.py</span></div>
+          <pre><code>def generate_batch(
+    model: AutoModelForCausalLM,
+    tokenizer: AutoTokenizer,
+    rendered_texts: List[str],
+    max_new_tokens: int,
+    do_sample: bool,
+) -> List[torch.Tensor]:
+    all_outputs = []
+    batch_size: int = 8
+
+    for i in range(0, len(rendered_texts), batch_size):
+        batch_texts = rendered_texts[i:i + batch_size]
+
+        # 1. 批量 tokenize（padding + truncation）
+        batch_inputs = tokenizer(
+            batch_texts,
+            return_tensors="pt",
+            padding=True,        # 补齐到最长序列
+            truncation=True,     # 截断超长序列
+        ).to(model.device)
+
+        # 2. 批量生成
+        batch_outputs = model.generate(
+            input_ids=batch_inputs["input_ids"],
+            attention_mask=batch_inputs.get("attention_mask"),
+            max_new_tokens=max_new_tokens,
+            do_sample=do_sample,
+            eos_token_id=tokenizer.eos_token_id,
+            pad_token_id=tokenizer.pad_token_id,
+        )
+
+        all_outputs.append(batch_outputs)
+
+    return all_outputs</code></pre>
+        </div>
+
+        <div class="info-box warning">
+          <span class="icon">!</span>
+          <div class="content">
+            <strong>批量推理注意事项</strong>
+            <p>1. 必须设置<code class="inline">padding=True</code>，否则不同长度输入无法组成批次<br>2. 必须设置<code class="inline">attention_mask</code>，让模型忽略padding位置<br>3. 建议设置<code class="inline">truncation=True</code>防止超长序列<br>4. 分批处理时，batch_size根据显存调整<br>5. 返回原始输出，不做后处理！</p>
+          </div>
+        </div>
+
+        <h3>测试数据分析</h3>
+        <h4>阶段一测试数据（8题）</h4>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>题目</th><th>答案</th><th>特点</th></tr></thead>
+            <tbody>
+              <tr><td>12 + 35</td><td>47</td><td>标准加法</td></tr>
+              <tr><td>100 - 78</td><td>22</td><td>标准减法</td></tr>
+              <tr><td>6的平方？</td><td>36</td><td>幂运算</td></tr>
+              <tr><td>28 + 37 + 7</td><td>72</td><td>三数连加</td></tr>
+              <tr><td>2^9 + 256 + 129 + 127</td><td>1024</td><td>指数+连加</td></tr>
+              <tr><td>45 加 89</td><td>134</td><td>中文"加"</td></tr>
+              <tr><td>【21 - 13】+ 27</td><td>35</td><td>方括号</td></tr>
+              <tr><td>13 加 50</td><td>63</td><td>中文"加"</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>阶段二测试数据示例（32题中部分）</h4>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>题目</th><th>答案</th><th>符号类型</th></tr></thead>
+            <tbody>
+              <tr><td>91 + 24</td><td>115</td><td>标准+</td></tr>
+              <tr><td>81 ＋ 35</td><td>116</td><td>全角＋</td></tr>
+              <tr><td>38 ➕ 67</td><td>105</td><td>emoji➕</td></tr>
+              <tr><td>45 加 41</td><td>86</td><td>中文"加"</td></tr>
+              <tr><td>78 减 56</td><td>22</td><td>中文"减"</td></tr>
+              <tr><td>34 ⊕ 19</td><td>53</td><td>特殊⊕</td></tr>
+              <tr><td>47 － 41</td><td>6</td><td>全角－</td></tr>
+              <tr><td>28 ➖ 16</td><td>12</td><td>emoji➖</td></tr>
+              <tr><td>46 ÷ 23</td><td>2</td><td>除法</td></tr>
+              <tr><td>【21 + 13】+ 7</td><td>41</td><td>方括号</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box success">
+          <span class="icon">✓</span>
+          <div class="content">
+            <strong>符号映射表（Prompt中需涵盖）</strong>
+            <p>加法：+ ＋ ➕ ⊕ 加 → +<br>减法：- － ➖ 减 → -<br>乘法：× * 乘 → ×<br>除法：÷ / 除 → ÷<br>注意：⊕不是异或，是普通加法</p>
+          </div>
+        </div>
+
+        <h3>评分标准</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>项目</th><th>分值</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>阶段一 - 正确性</td><td>60分</td><td>8题，每题10分，答对≥6题满分</td></tr>
+              <tr><td>阶段二 - 正确性</td><td>40分</td><td>32题，每题1.5分，满分40分</td></tr>
+              <tr><td><strong>总分</strong></td><td><strong>100分</strong></td><td>-</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- T2 Section -->
+      <div class="content-section">
+        <h2>T2：多样性数据生成与相似度计算</h2>
+
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon green">50</div>
+            <h3>第一部分：相似度计算</h3>
+            <p>10组文本对测试，每组5分，允许误差≤0.03，通过≥8组满分50分。必须满分才能进入第二部分。</p>
+            <span class="tag green">compute_similarity</span>
+          </div>
+          <div class="card">
+            <div class="card-icon green">50</div>
+            <h3>第二部分：数据多样性</h3>
+            <p>生成1024条数据，检查唯一性、质量、平均相似度。相似度≤0.5满分50分。</p>
+            <span class="tag green">dataset.jsonl</span>
+          </div>
+        </div>
+
+        <h3>故事背景</h3>
+        <p>你正在为在线学习平台开发智能题库系统。需要实现准确的相似度判断和多样化的题目生成。同样是<code class="inline">12 + 35</code>这道题，可能有多种表达方式：符号变体、顺序变化、文字表达等。</p>
+
+        <h3>核心任务1：compute_similarity()</h3>
+        <p>使用给定的Embedding模型计算两个文本的余弦相似度。技术要点：Last-token pooling、L2 normalization、余弦相似度。</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>submission.py</span></div>
+          <pre><code>import torch
+import torch.nn.functional as F
+from transformers import AutoTokenizer, AutoModel
+
+def _last_token_pool(last_hidden_states, attention_mask):
+    """
+    Last-token pooling - 提取最后一个token的hidden state作为句向量
+
+    参数：
+        last_hidden_states: (batch_size, seq_len, hidden_dim)
+        attention_mask: (batch_size, seq_len)
+    返回：
+        句向量 (batch_size, hidden_dim)
+    """
+    # 检查是否使用了左侧 padding
+    left_padding = (attention_mask[:, -1].sum() == attention_mask.shape[0])
+
+    if left_padding:
+        # 左侧 padding：最后一个token都是有效的，直接取
+        return last_hidden_states[:, -1]
+    else:
+        # 右侧 padding：需要找到每个样本最后一个有效token
+        seq_lens = attention_mask.sum(dim=1) - 1
+        batch_size = last_hidden_states.shape[0]
+        return last_hidden_states[torch.arange(batch_size, device=last_hidden_states.device), seq_lens]
+
+
+def compute_similarity(text1, text2, model, tokenizer):
+    """
+    计算两个文本之间的余弦相似度
+    """
+    device = next(model.parameters()).device
+
+    # 1. 对文本进行分词和编码
+    inputs = tokenizer(
+        [text1, text2],
+        padding=True,
+        truncation=True,
+        max_length=8192,
+        return_tensors="pt",
+    )
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+
+    # 2. 获取模型输出
+    with torch.no_grad():
+        outputs = model(**inputs)
+
+    # 3. Last-token pooling 提取句向量
+    last_hidden_states = outputs.last_hidden_state
+    sentence_embeddings = _last_token_pool(last_hidden_states, inputs["attention_mask"])
+
+    # 4. L2 归一化（向量为单位向量）
+    sentence_embeddings = F.normalize(sentence_embeddings, p=2, dim=1)
+
+    # 5. 余弦相似度（归一化后点积=余弦相似度）
+    similarity = (sentence_embeddings[0] @ sentence_embeddings[1]).item()
+
+    return similarity</code></pre>
+        </div>
+
+        <div class="info-box info">
+          <span class="icon">i</span>
+          <div class="content">
+            <strong>关键技术点详解</strong>
+            <p><strong>Last-token pooling vs Mean pooling</strong>：Qwen3-Embedding使用last-token pooling，因为因果语言模型的最后一个token包含了整个序列的信息。mean pooling会稀释信息。<br><br><strong>左侧padding vs 右侧padding</strong>：左侧padding时，有效token在右侧，最后一个位置是有效的；右侧padding时，padding在右侧，需要找到最后一个有效token的位置。<br><br><strong>L2归一化</strong>：<code class="inline">F.normalize(x, p=2, dim=1)</code>将向量除以其L2范数，长度变为1。归一化后点积=余弦相似度，值域[-1,1]。</p>
+          </div>
+        </div>
+
+        <h3>相似度测试用例分析</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>文本1</th><th>文本2</th><th>描述</th><th>标准相似度</th></tr></thead>
+            <tbody>
+              <tr><td>12 + 35</td><td>12 + 35</td><td>完全相同</td><td>1.000</td></tr>
+              <tr><td>12 + 35</td><td>12＋35</td><td>符号不同</td><td>0.877</td></tr>
+              <tr><td>12 + 35</td><td>35 + 12</td><td>顺序不同</td><td>0.869</td></tr>
+              <tr><td>12 + 35</td><td>12 加 35</td><td>文字表达</td><td>0.772</td></tr>
+              <tr><td>12 + 35</td><td>计算：12 加 35</td><td>带前缀</td><td>0.767</td></tr>
+              <tr><td>12 + 35</td><td>12 - 35</td><td>运算不同</td><td>0.835</td></tr>
+              <tr><td>12 + 35</td><td>23 + 46</td><td>数字不同</td><td>0.818</td></tr>
+              <tr><td>12 + 35</td><td>请问5的平方是多少？</td><td>完全不同</td><td>0.470</td></tr>
+              <tr><td>(12+35)×2</td><td>(12＋35)×2</td><td>复杂表达式</td><td>0.948</td></tr>
+              <tr><td>6的平方</td><td>6^2</td><td>幂运算</td><td>0.796</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box warning">
+          <span class="icon">!</span>
+          <div class="content">
+            <strong>相似度计算常见错误</strong>
+            <p>1. 使用mean pooling而非last-token pooling → 相似度不匹配<br>2. 忘记L2归一化 → 点积不等于余弦相似度<br>3. 没有处理padding方向 → 取错token<br>4. 忘记torch.no_grad() → 浪费显存<br>5. 没有将输入移到模型所在设备 → 运行时错误</p>
+          </div>
+        </div>
+
+        <h3>核心任务2：生成多样化数据集</h3>
+        <p>生成<code class="inline">data/dataset.jsonl</code>文件，包含1024条高质量数学题目数据。</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>要求</th><th>说明</th><th>违规扣分</th></tr></thead>
+            <tbody>
+              <tr><td>数量</td><td>1024条</td><td>每少/多1条扣1分</td></tr>
+              <tr><td>唯一性</td><td>所有题目不能重复</td><td>每条重复扣1分</td></tr>
+              <tr><td>非空</td><td>题目不能为空</td><td>每条空扣1分</td></tr>
+              <tr><td>数字个数</td><td>每题最多3个数字</td><td>每条超限扣1分</td></tr>
+              <tr><td>答案范围</td><td>3位数(100-999)</td><td>每条违规扣1分</td></tr>
+              <tr><td>平均相似度</td><td>≤0.5满分</td><td>0.5~0.7线性扣分</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>数据格式示例</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">JSON Lines</span><span>dataset.jsonl</span></div>
+          <pre><code>{"problem": "818 ⊖ 10 减 89", "answer": "719"}
+{"problem": "(98 － 30) 乘 9", "answer": "612"}
+{"problem": "28 乘 19 / 4", "answer": "133"}
+{"problem": "156 加 403", "answer": "559"}
+{"problem": "700 － 201", "answer": "499"}</code></pre>
+        </div>
+
+        <h4>数据生成策略</h4>
+        <div class="info-box success">
+          <span class="icon">✓</span>
+          <div class="content">
+            <strong>降低相似度的策略</strong>
+            <p><strong>1. 使用多种运算符</strong>：+、－、⊕、➕、加、减、×、乘、÷、除等，增加表达式多样性<br><strong>2. 使用多种数字组合</strong>：不同位数的数字（1位数、2位数、3位数），答案控制在100-999<br><strong>3. 使用多种表达形式</strong>：符号运算、中文运算、混合运算、带括号的表达式<br><strong>4. 使用多种运算类型</strong>：单运算、双运算、三运算（不超过3个数字）<br><strong>5. 随机化数字顺序</strong>：如"12加35"vs"35加12"（但答案不同以保持唯一性）</p>
+          </div>
+        </div>
+
+        <div class="info-box warning">
+          <span class="icon">!</span>
+          <div class="content">
+            <strong>数据生成代码思路</strong>
+            <p>可以使用Python脚本生成数据。核心思路：<br>1. 枚举运算符列表和数字范围<br>2. 随机组合数字和运算符生成题目<br>3. 计算正确答案<br>4. 过滤答案不在100-999范围的<br>5. 确保题目唯一<br>6. 生成超过1024条后计算相似度，去除相似度过高的，保留1024条</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>generate_data.py (辅助脚本)</span></div>
+          <pre><code>import json
+import random
+import itertools
+
+# 运算符池
+ADD_OPS = ['+', '＋', '➕', '⊕', '加']
+SUB_OPS = ['-', '－', '➖', '减']
+MUL_OPS = ['×', '*', '乘']
+DIV_OPS = ['÷', '/', '除']
+
+ALL_OPS = ADD_OPS + SUB_OPS + MUL_OPS + DIV_OPS
+
+def compute(problem):
+    """计算数学题的答案"""
+    # 将各种符号转换为标准运算符
+    s = problem
+    for op in ADD_OPS:
+        s = s.replace(op, '+')
+    for op in SUB_OPS:
+        s = s.replace(op, '-')
+    for op in MUL_OPS:
+        s = s.replace(op, '*')
+    for op in DIV_OPS:
+        s = s.replace(op, '/')
+    # 替换中文括号
+    s = s.replace('【', '(').replace('】', ')')
+    # 评估表达式
+    try:
+        result = eval(s)
+        if isinstance(result, float) and result == int(result):
+            result = int(result)
+        return result
+    except:
+        return None
+
+def generate_problems(n=1024):
+    problems = set()
+    seen_answers = set()
+
+    while len(problems) < n * 3:  # 多生成一些用于筛选
+        # 随机选择1-3个数字
+        n_nums = random.choice([1, 2, 3])
+        nums = [random.randint(1, 999) for _ in range(n_nums)]
+
+        # 随机选择运算符
+        ops = [random.choice(ALL_OPS) for _ in range(n_nums - 1)]
+
+        # 构建题目
+        problem = str(nums[0])
+        for i in range(len(ops)):
+            problem += f' {ops[i]} {nums[i+1]}'
+
+        # 计算答案
+        answer = compute(problem)
+
+        # 过滤
+        if answer is None:
+            continue
+        if isinstance(answer, float):
+            continue
+        if answer < 100 or answer > 999:
+            continue
+        if problem in problems:
+            continue
+
+        problems.add(problem)
+
+    # 转换为JSONL格式
+    results = []
+    for p in list(problems)[:n]:
+        a = compute(p)
+        results.append({"problem": p, "answer": str(a)})
+
+    return results
+
+# 保存到文件
+data = generate_problems(1024)
+with open("data/dataset.jsonl", "w", encoding="utf-8") as f:
+    for item in data:
+        f.write(json.dumps(item, ensure_ascii=False) + "\n")</code></pre>
+        </div>
+
+        <h3>评分标准</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>项目</th><th>分值</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>第一部分 - 相似度计算</td><td>50分</td><td>10组测试，每组5分，通过≥8组满分</td></tr>
+              <tr><td>第二部分 - 数据质量</td><td>0~50分</td><td>数量扣分 + 质量扣分</td></tr>
+              <tr><td>第二部分 - 相似度评分</td><td>0~50分</td><td>≤0.5满分，0.5~0.7线性</td></tr>
+              <tr><td><strong>最终得分</strong></td><td><strong>0~100分</strong></td><td>第一部分 + 第二部分</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box danger">
+          <span class="icon">!</span>
+          <div class="content">
+            <strong>重要提醒</strong>
+            <p>第一部分必须满分（50分）才能进入第二部分测试！否则总分最多50分。这意味着compute_similarity函数的实现是最优先的，必须确保正确性。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- File Structure -->
+      <div class="content-section">
+        <h2>文件结构说明</h2>
+        <div class="tabs-container">
+          <div class="tabs">
+            <button class="tab active" data-tab="t1-struct">T1 文件结构</button>
+            <button class="tab" data-tab="t2-struct">T2 文件结构</button>
+          </div>
+
+          <div class="tab-panel active" id="t1-struct">
+            <div class="code-block">
+              <div class="code-header"><span class="lang">Text</span></div>
+              <pre><code>T1/
+├── data/
+│   ├── test_data_1.jsonl    # 阶段一测试数据（8题）
+│   └── test_data_2.jsonl    # 阶段二测试数据（32题）
+├── evaluate.py              # 评测主程序（不可修改）
+├── submission.py            # 考生实现文件（仅此文件可修改）
+└── README.md                # 说明文档</code></pre>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="t2-struct">
+            <div class="code-block">
+              <div class="code-header"><span class="lang">Text</span></div>
+              <pre><code>T2/
+├── data/
+│   ├── test_data_1.jsonl    # 相似度测试用例（10组）
+│   └── dataset.jsonl        # 考生生成的数据集（1024条）
+├── evaluate.py              # 评测主程序（不可修改）
+├── submission.py            # 考生实现文件（仅此文件可修改）
+└── README.md                # 说明文档</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box info">
+          <span class="icon">i</span>
+          <div class="content">
+            <strong>运行方式</strong>
+            <p><code class="inline">python evaluate.py</code>（演示模式，详细输出）<br><code class="inline">python evaluate.py --mode grading</code>（评分模式，简洁输出）</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="content-section">
+        <h2>备考建议</h2>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon blue">1</div>
+            <h3>理解模型加载</h3>
+            <p>掌握AutoModelForCausalLM和AutoModel的区别，理解device_map、torch_dtype等参数。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon green">2</div>
+            <h3>动手练习</h3>
+            <p>在本地安装PyTorch和Transformers，实际运行模型推理代码，理解tokenizer和generate的完整流程。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">3</div>
+            <h3>研究测试数据</h3>
+            <p>仔细分析test_data中的各种符号变体，确保Prompt能覆盖所有情况。对T2，理解相似度测试用例的规律。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon red">4</div>
+            <h3>模拟评测</h3>
+            <p>完成代码后用evaluate.py运行模拟评测，在demo模式下查看每个题目的推理结果，针对性优化。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>LMCC 学习中心</h4>
+          <p>大模型编程认证备考学习平台</p>
+        </div>
+        <div>
+          <h4>学习导航</h4>
+          <p><a href="round1.html">第一轮备考</a></p>
+          <p><a href="round2.html">第二轮备考</a></p>
+          <p><a href="knowledge.html">知识库</a></p>
+          <p><a href="quiz.html">模拟测验</a></p>
+        </div>
+        <div>
+          <h4>技术参考</h4>
+          <p><a href="https://pytorch.org" target="_blank">PyTorch 文档</a></p>
+          <p><a href="https://huggingface.co/docs/transformers" target="_blank">Transformers 文档</a></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>LMCC Study Center | 基于真题制作 | 仅供学习交流</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

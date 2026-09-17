@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知识库 - LMCC学习中心</title>
+  <meta name="description" content="LMCC认证核心概念知识库，详解Transformer、注意力机制、LoRA、RAG等关键技术">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <span class="logo">L</span>
+      <span>LMCC 学习中心</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="round1.html">第一轮备考</a>
+      <a href="round2.html">第二轮备考</a>
+      <a href="knowledge.html">知识库</a>
+      <a href="quiz.html">模拟测验</a>
+    </div>
+    <button class="nav-toggle">☰</button>
+  </nav>
+
+  <div class="main-content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="container">
+        <h1>知识库</h1>
+        <p>LMCC认证核心概念详解</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Quick Nav -->
+      <div class="content-section">
+        <div class="section-header">
+          <div class="eyebrow">快速导航</div>
+          <h2>知识图谱</h2>
+        </div>
+        <div class="cards-grid">
+          <a href="#transformer" class="card" style="text-decoration: none;">
+            <div class="card-icon blue">TF</div>
+            <h3>Transformer</h3>
+            <p>编码器、解码器、注意力机制</p>
+          </a>
+          <a href="#attention" class="card" style="text-decoration: none;">
+            <div class="card-icon purple">AT</div>
+            <h3>注意力机制</h3>
+            <p>Self-Attention、GQA、QKV</p>
+          </a>
+          <a href="#training" class="card" style="text-decoration: none;">
+            <div class="card-icon orange">TR</div>
+            <h3>训练与微调</h3>
+            <p>预训练、SFT、LoRA、RLHF</p>
+          </a>
+          <a href="#inference" class="card" style="text-decoration: none;">
+            <div class="card-icon green">IN</div>
+            <h3>推理与部署</h3>
+            <p>解码策略、vLLM、MoE</p>
+          </a>
+          <a href="#embedding" class="card" style="text-decoration: none;">
+            <div class="card-icon cyan">EM</div>
+            <h3>Embedding与相似度</h3>
+            <p>向量化、Pooling、余弦相似度</p>
+          </a>
+          <a href="#prompt" class="card" style="text-decoration: none;">
+            <div class="card-icon red">PE</div>
+            <h3>提示词工程</h3>
+            <p>System Prompt、CoT、角色设定</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- 1. Transformer -->
+      <div class="content-section" id="transformer">
+        <h2>Transformer 架构</h2>
+        <p>Transformer是现代大语言模型的基石架构，由Google在2017年提出。它摒弃了RNN的递归结构，完全基于注意力机制。</p>
+
+        <h3>三大架构类型</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>类型</th><th>代表模型</th><th>特点</th><th>适用场景</th></tr></thead>
+            <tbody>
+              <tr><td>编码器 (Encoder)</td><td>BERT</td><td>双向注意力，理解上下文</td><td>分类、NER</td></tr>
+              <tr><td>解码器 (Decoder)</td><td>GPT系列</td><td>单向注意力，自回归生成</td><td>文本生成</td></tr>
+              <tr><td>编码器-解码器</td><td>T5, BART</td><td>交叉注意力</td><td>翻译、摘要</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>核心组件</h3>
+        <ul>
+          <li><strong>自注意力机制</strong>：允许序列中任意位置直接交互，处理长距离依赖</li>
+          <li><strong>多头注意力</strong>：多组QKV并行计算，捕获不同子空间的信息</li>
+          <li><strong>前馈神经网络 (FFN)</strong>：每个位置独立的两层MLP，增加非线性</li>
+          <li><strong>残差连接</strong>：缓解梯度消失，支持深层网络训练</li>
+          <li><strong>层归一化 (LayerNorm)</strong>：稳定训练，可选Pre-Norm或Post-Norm</li>
+          <li><strong>位置编码</strong>：为无序的注意力机制提供位置信息</li>
+        </ul>
+
+        <h3>数据流向</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Text</span><span>Transformer数据流</span></div>
+          <pre><code>输入序列 → 嵌入层 + 位置编码
+         ↓
+    ┌─────────────────┐
+    │  多头自注意力    │ ← Q, K, V 线性投影
+    │  (Self-Attention)│
+    ├─────────────────┤
+    │  Add & LayerNorm │ ← 残差连接 + 归一化
+    ├─────────────────┤
+    │  前馈网络 (FFN)   │ ← 两层MLP + 激活函数
+    ├─────────────────┤
+    │  Add & LayerNorm │ ← 残差连接 + 归一化
+    └─────────────────┘
+         ↓ (重复N层)
+      输出 → Linear → Softmax → 概率分布</code></pre>
+        </div>
+      </div>
+
+      <!-- 2. Attention -->
+      <div class="content-section" id="attention">
+        <h2>注意力机制详解</h2>
+
+        <h3>Self-Attention（自注意力）</h3>
+        <p>Query、Key、Value都来自同一个输入序列，通过三个不同的权重矩阵投影得到。</p>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>自注意力计算</span></div>
+          <pre><code># Q, K, V 都来自输入 x 的不同线性变换
+Q = x @ Wq    # (B, L, D) @ (D, D) → (B, L, D)
+K = x @ Wk    # 同上
+V = x @ Wv    # 同上
+
+# 注意力分数 = Q · K^T / √(dk)
+scale = 1.0 / math.sqrt(D)
+logits = torch.matmul(Q, K.transpose(-2, -1)) * scale  # (B, L, L)
+
+# 因果掩码（解码器专用）
+logits = logits.masked_fill(causal_mask == 0, float('-inf'))
+
+# Softmax 归一化
+attn = torch.softmax(logits, dim=-1)  # (B, L, L)
+
+# 加权求和
+output = torch.matmul(attn, V)  # (B, L, D)</code></pre>
+        </div>
+
+        <h3>分组查询注意力 (GQA)</h3>
+        <p>GQA是MHA和MQA的折中方案：查询头数H > 键值头数Kv，通过复制KV头来匹配Q。</p>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>类型</th><th>查询头数</th><th>KV头数</th><th>特点</th></tr></thead>
+            <tbody>
+              <tr><td>MHA (Multi-Head Attention)</td><td>H</td><td>H</td><td>标准多头注意力</td></tr>
+              <tr><td>GQA (Grouped-Query)</td><td>H</td><td>Kv (Kv < H)</td><td>KV头共享，减少KV Cache</td></tr>
+              <tr><td>MQA (Multi-Query)</td><td>H</td><td>1</td><td>所有头共享1组KV</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>GQA中的KV扩展</span></div>
+          <pre><code>def expand_kv_for_gqa(x, n_rep):
+    """将KV头扩展到与查询头数一致"""
+    B, Kv, L, D = x.shape
+    H = Kv * n_rep
+    x = x.unsqueeze(1).repeat(1, n_rep, 1, 1, 1)
+    # (B, n_rep, Kv, L, D) → (B, H, L, D)
+    return x.reshape(B, H, L, D)
+
+# 在GQA推理中：
+kH = expand_kv_for_gqa(k_all, head_rep)
+vH = expand_kv_for_gqa(v_all, head_rep)</code></pre>
+        </div>
+
+        <h3>缩放因子的作用</h3>
+        <p>注意力分数 <code class="inline">Q·K^T</code> 随维度D增大而增大，导致softmax进入饱和区（梯度趋近0）。乘以 <code class="inline">1/√D</code> 将方差控制在1附近，保持梯度健康。</p>
+      </div>
+
+      <!-- 3. Training -->
+      <div class="content-section" id="training">
+        <h2>训练与微调</h2>
+
+        <h3>训练阶段</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>阶段</th><th>目标</th><th>数据</th><th>代表方法</th></tr></thead>
+            <tbody>
+              <tr><td>预训练 (Pre-training)</td><td>学习通用语言知识</td><td>海量无标注文本</td><td>下一个词预测</td></tr>
+              <tr><td>指令微调 (SFT)</td><td>学会遵循指令</td><td>(指令, 输出)配对</td><td>监督学习</td></tr>
+              <tr><td>人类对齐</td><td>安全、有用、符合价值观</td><td>偏好数据</td><td>RLHF / DPO</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>LoRA（低秩适配）</h3>
+        <p>LoRA通过在冻结的原始权重旁并联低秩矩阵A和B，只训练A和B，大幅减少训练参数。</p>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>LoRA配置</span></div>
+          <pre><code>from peft import LoraConfig, get_peft_model
+
+lora_config = LoraConfig(
+    r=8,                    # 低秩矩阵的秩
+    lora_alpha=16,          # 缩放因子 (通常 = 2 * r)
+    target_modules=["q_proj", "v_proj"],  # 注入位置
+    lora_dropout=0.05,     # Dropout
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+model = get_peft_model(model, lora_config)</code></pre>
+        </div>
+
+        <div class="info-box info">
+          <span class="icon">i</span>
+          <div class="content">
+            <strong>LoRA关键参数</strong>
+            <p><strong>r (秩)</strong>：低秩矩阵的维度。越大表达能力越强但参数越多。常见值：8, 16, 64<br><strong>lora_alpha</strong>：缩放因子，控制LoRA对原始权重的影响。通常设为2*r<br><strong>target_modules</strong>：注入LoRA的层。最常用：<code class="inline">["q_proj", "v_proj"]</code></p>
+          </div>
+        </div>
+
+        <h3>RLHF vs DPO</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>对比项</th><th>RLHF</th><th>DPO</th></tr></thead>
+            <tbody>
+              <tr><td>流程</td><td>SFT → 训练奖励模型 → PPO训练</td><td>SFT → 直接偏好优化</td></tr>
+              <tr><td>是否需要奖励模型</td><td>需要</td><td>不需要</td></tr>
+              <tr><td>训练稳定性</td><td>较低（PPO不稳定）</td><td>较高</td></tr>
+              <tr><td>实现复杂度</td><td>高</td><td>低</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>学习率预热 (Warmup)</h3>
+        <p>训练初期模型权重随机初始化，梯度较大。直接使用大学习率可能导致梯度爆炸。Warmup在训练前N步使用较小学习率逐步增大到目标值，稳定训练初期。</p>
+      </div>
+
+      <!-- 4. Inference -->
+      <div class="content-section" id="inference">
+        <h2>推理与部署</h2>
+
+        <h3>解码策略</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>策略</th><th>原理</th><th>优点</th><th>缺点</th></tr></thead>
+            <tbody>
+              <tr><td>贪心搜索 (Greedy)</td><td>每步选概率最高的token</td><td>速度快</td><td>可能错过全局最优</td></tr>
+              <tr><td>束搜索 (Beam Search)</td><td>维护K条候选路径</td><td>整体质量更好</td><td>计算量大</td></tr>
+              <tr><td>Top-K采样</td><td>从概率最高的K个中采样</td><td>增加多样性</td><td>可能选到低质量token</td></tr>
+              <tr><td>Top-P (核采样)</td><td>从累积概率≥P的token中采样</td><td>自适应选择范围</td><td>参数敏感</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>vLLM</h3>
+        <p>vLLM通过PagedAttention机制管理KV Cache内存，解决内存碎片问题，实现高吞吐量推理服务。</p>
+        <div class="info-box info">
+          <span class="icon">i</span>
+          <div class="content">
+            <strong>PagedAttention</strong>
+            <p>借鉴操作系统虚拟内存的分页机制，将KV Cache分成固定大小的"页"，按需分配，避免连续内存分配导致的碎片化。</p>
+          </div>
+        </div>
+
+        <h3>MoE（混合专家模型）</h3>
+        <p>MoE通过路由机制将不同token分配给不同的"专家"网络，增加模型容量而不等比增加计算量。</p>
+        <div class="info-box warning">
+          <span class="icon">!</span>
+          <div class="content">
+            <strong>MoE主要挑战</strong>
+            <p>专家负载不均衡：某些专家被过度使用，其他专家训练不足。需要通过负载均衡损失等机制来缓解。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Embedding -->
+      <div class="content-section" id="embedding">
+        <h2>Embedding 与相似度计算</h2>
+        <p>这是第二轮T2的核心知识。Embedding模型将文本转换为向量，通过向量间的距离衡量语义相似度。</p>
+
+        <h3>工作流程</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Text</span><span>Embedding相似度计算流程</span></div>
+          <pre><code>文本1 → Tokenize → Embedding模型 → last_hidden_state
+                                           ↓
+                                    Last-token Pooling
+                                           ↓
+                                    L2 归一化
+                                           ↓
+                                    句向量1 (unit vector)
+
+文本2 → Tokenize → Embedding模型 → last_hidden_state
+                                           ↓
+                                    Last-token Pooling
+                                           ↓
+                                    L2 归一化
+                                           ↓
+                                    句向量2 (unit vector)
+                                           ↓
+                            余弦相似度 = vec1 · vec2 (点积)</code></pre>
+        </div>
+
+        <h3>Pooling策略对比</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>策略</th><th>做法</th><th>适用模型</th></tr></thead>
+            <tbody>
+              <tr><td>Last-token Pooling</td><td>取序列最后一个有效token</td><td>因果模型 (GPT, Qwen)</td></tr>
+              <tr><td>Mean Pooling</td><td>对所有token求平均</td><td>双向模型 (BERT)</td></tr>
+              <tr><td>CLS Token Pooling</td><td>取第一个token ([CLS])</td><td>BERT系列</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>左侧 vs 右侧 Padding</h3>
+        <div class="info-box warning">
+          <span class="icon">!</span>
+          <div class="content">
+            <strong>Last-token Pooling的Padding方向问题</strong>
+            <p><strong>右侧Padding</strong>（默认）：pad_token在右边，最后一个token是padding。需要找到最后一个有效token的位置。<br><strong>左侧Padding</strong>：pad_token在左边，最后一个token是有效的。直接取最后一个即可。<br><br>判断方法：检查<code class="inline">attention_mask[:, -1].sum() == batch_size</code>，如果为True说明所有样本最后位置都有效（左侧padding）。</p>
+          </div>
+        </div>
+
+        <h3>L2归一化</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>L2归一化</span></div>
+          <pre><code>import torch.nn.functional as F
+
+# 归一化前：||vec|| 可能是任意长度
+# 归一化后：||vec|| = 1
+
+sentence_embeddings = F.normalize(sentence_embeddings, p=2, dim=1)
+
+# 归一化后的点积 = 余弦相似度
+similarity = (vec1 @ vec2).item()  # 值域 [-1, 1]</code></pre>
+        </div>
+
+        <h3>余弦相似度</h3>
+        <p>余弦相似度衡量两个向量方向的夹角，值域[-1, 1]。值越接近1表示越相似，越接近-1表示越相反，0表示正交（不相关）。在文本相似度任务中，值通常在[0, 1]范围内。</p>
+      </div>
+
+      <!-- 6. Prompt Engineering -->
+      <div class="content-section" id="prompt">
+        <h2>提示词工程</h2>
+        <p>这是第二轮T1的核心知识。好的System Prompt能显著提升模型输出的准确性和格式规范性。</p>
+
+        <h3>Prompt设计原则</h3>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon blue">1</div>
+            <h3>明确角色</h3>
+            <p>告诉模型它的身份："你是一个精确的数学计算助手"</p>
+          </div>
+          <div class="card">
+            <div class="card-icon green">2</div>
+            <h3>明确规则</h3>
+            <p>定义输入符号的映射规则，让模型理解各种变体</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">3</div>
+            <h3>明确步骤</h3>
+            <p>要求模型按步骤计算，利用思维链提高准确性</p>
+          </div>
+          <div class="card">
+            <div class="card-icon red">4</div>
+            <h3>明确格式</h3>
+            <p>严格约束输出格式：[Answer]: 数值</p>
+          </div>
+        </div>
+
+        <h3>Chat Template</h3>
+        <p>Chat Template是Transformers库提供的方法，将对话消息（system/user/assistant）转换为模型能理解的输入文本。</p>
+        <div class="code-block">
+          <div class="code-header"><span class="lang">Python</span><span>Chat Template使用</span></div>
+          <pre><code>messages = [
+    {"role": "system", "content": system_prompt},
+    {"role": "user", "content": problem},
+]
+
+rendered = tokenizer.apply_chat_template(
+    messages,
+    tokenize=False,              # 返回文本字符串
+    add_generation_prompt=True,  # 添加生成提示符
+    enable_thinking=True,        # 启用思考模式 (Qwen3)
+)
+
+# rendered 是一个字符串，可以直接传给 model.generate()</code></pre>
+        </div>
+
+        <div class="info-box info">
+          <span class="icon">i</span>
+          <div class="content">
+            <strong>enable_thinking 参数</strong>
+            <p>Qwen3模型支持思考模式，启用后模型会先在&lt;think&gt;标签中进行推理，然后在&lt;/think&gt;后输出最终答案。评测程序会自动移除思考内容，只提取最终答案。</p>
+          </div>
+        </div>
+
+        <h3>思维链 (Chain-of-Thought)</h3>
+        <p>思维链是指模型在给出最终答案前，先展示推理过程。研究表明这能显著提高复杂推理任务的准确性。</p>
+        <div class="info-box success">
+          <span class="icon">✓</span>
+          <div class="content">
+            <strong>CoT在T1中的应用</strong>
+            <p>在System Prompt中要求模型"分步计算"，配合enable_thinking=True，让模型先推理再输出答案。这能帮助模型正确处理各种符号变体和复杂运算。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Reference -->
+      <div class="content-section">
+        <h2>关键API速查</h2>
+
+        <h3>Transformers 核心 API</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>API</th><th>用途</th><th>示例</th></tr></thead>
+            <tbody>
+              <tr><td>AutoTokenizer.from_pretrained()</td><td>加载分词器</td><td><code class="inline">AutoTokenizer.from_pretrained(name, trust_remote_code=True)</code></td></tr>
+              <tr><td>AutoModel.from_pretrained()</td><td>加载Embedding模型</td><td><code class="inline">AutoModel.from_pretrained(name)</code></td></tr>
+              <tr><td>AutoModelForCausalLM.from_pretrained()</td><td>加载生成模型</td><td><code class="inline">AutoModelForCausalLM.from_pretrained(name, torch_dtype=torch.float16)</code></td></tr>
+              <tr><td>tokenizer()</td><td>文本编码</td><td><code class="inline">tokenizer(text, return_tensors="pt", padding=True, truncation=True)</code></td></tr>
+              <tr><td>apply_chat_template()</td><td>对话模板</td><td><code class="inline">tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)</code></td></tr>
+              <tr><td>model.generate()</td><td>文本生成</td><td><code class="inline">model.generate(input_ids, max_new_tokens=512, do_sample=True)</code></td></tr>
+              <tr><td>model(**inputs)</td><td>前向传播</td><td><code class="inline">outputs = model(**enc)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>PyTorch 核心 API</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>API</th><th>用途</th></tr></thead>
+            <tbody>
+              <tr><td>torch.no_grad()</td><td>禁用梯度计算，节省显存</td></tr>
+              <tr><td>F.normalize(x, p=2, dim=1)</td><td>L2归一化</td></tr>
+              <tr><td>torch.matmul(a, b)</td><td>矩阵乘法</td></tr>
+              <tr><td>torch.softmax(x, dim=-1)</td><td>Softmax归一化</td></tr>
+              <tr><td>torch.cat(tensors, dim=)</td><td>张量拼接</td></tr>
+              <tr><td>torch.topk(x, k=)</td><td>取top-k值和索引</td></tr>
+              <tr><td>tensor.to(device)</td><td>移动到指定设备</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>LMCC 学习中心</h4>
+          <p>大模型编程认证备考学习平台</p>
+        </div>
+        <div>
+          <h4>学习导航</h4>
+          <p><a href="round1.html">第一轮备考</a></p>
+          <p><a href="round2.html">第二轮备考</a></p>
+          <p><a href="knowledge.html">知识库</a></p>
+          <p><a href="quiz.html">模拟测验</a></p>
+        </div>
+        <div>
+          <h4>技术参考</h4>
+          <p><a href="https://pytorch.org" target="_blank">PyTorch 文档</a></p>
+          <p><a href="https://huggingface.co/docs/transformers" target="_blank">Transformers 文档</a></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>LMCC Study Center | 基于真题制作 | 仅供学习交流</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

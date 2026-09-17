@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第一轮备考 - LMCC学习中心</title>
+  <meta name="description" content="LMCC第一轮理论知识备考，含青少年组和成人组真题详解">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <span class="logo">L</span>
+      <span>LMCC 学习中心</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="round1.html">第一轮备考</a>
+      <a href="round2.html">第二轮备考</a>
+      <a href="knowledge.html">知识库</a>
+      <a href="quiz.html">模拟测验</a>
+    </div>
+    <button class="nav-toggle">☰</button>
+  </nav>
+
+  <div class="main-content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="container">
+        <h1>第一轮：理论知识</h1>
+        <p>单选题 20题×3分=60分 + 程序题 10题×4分=40分 = 100分</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Overview -->
+      <div class="content-section">
+        <div class="info-box info">
+          <span class="icon">i</span>
+          <div class="content">
+            <strong>第一轮考试说明</strong>
+            <p>第一轮为理论知识考核，分为青少年组和成人组两套试卷。同学们已通过青少年组试卷，本页面提供青少年组和成人组的完整真题解析，帮助巩固和拓展知识。建议在备考第二轮前，确保所有知识点理解透彻。</p>
+          </div>
+        </div>
+
+        <h2>核心知识领域</h2>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon blue">LLM</div>
+            <h3>大语言模型基础</h3>
+            <p>LLM定义、解码器架构、自回归生成、涌现能力、上下文学习</p>
+          </div>
+          <div class="card">
+            <div class="card-icon purple">TF</div>
+            <h3>Transformer架构</h3>
+            <p>自注意力机制、QKV投影、多头注意力、GQA、前馈网络、残差连接、层归一化</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">PT</div>
+            <h3>训练与微调</h3>
+            <p>预训练、指令微调(SFT)、LoRA、人类对齐(RLHF/DPO)、学习率预热</p>
+          </div>
+          <div class="card">
+            <div class="card-icon green">PE</div>
+            <h3>提示词工程</h3>
+            <p>角色设定、思维链(CoT)、系统指令、Prompt优化策略</p>
+          </div>
+          <div class="card">
+            <div class="card-icon cyan">INF</div>
+            <h3>推理与部署</h3>
+            <p>贪心搜索、束搜索、vLLM、PagedAttention、MoE、KV Cache</p>
+          </div>
+          <div class="card">
+            <div class="card-icon red">APP</div>
+            <h3>应用与评测</h3>
+            <p>RAG、AI智能体、Pass@K、困惑度、偏见与安全、Test-Time Scaling</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs for Youth/Adult -->
+      <div class="content-section">
+        <div class="tabs-container">
+          <div class="tabs">
+            <button class="tab active" data-tab="youth-tab">青少年组</button>
+            <button class="tab" data-tab="adult-tab">成人组</button>
+          </div>
+
+          <!-- Youth Group -->
+          <div class="tab-panel active" id="youth-tab">
+            <h2>单选题（20题 × 3分 = 60分）</h2>
+
+            <!-- Q1-5: LLM Basics -->
+            <h3>第一部分：大语言模型基础</h3>
+            <div id="youth-mcq-container"></div>
+
+            <h2>程序题（10题 × 4分 = 40分）</h2>
+            <h3>一、检索增强生成（RAG）—— 5题</h3>
+            <div id="youth-prog-rag"></div>
+
+            <h3>二、参数高效微调（LoRA）—— 5题</h3>
+            <div id="youth-prog-lora"></div>
+          </div>
+
+          <!-- Adult Group -->
+          <div class="tab-panel" id="adult-tab">
+            <h2>单选题（20题 × 3分 = 60分）</h2>
+            <div id="adult-mcq-container"></div>
+
+            <h2>程序题（10题 × 4分 = 40分）</h2>
+            <h3>一、参数高效微调（LoRA）—— 5题</h3>
+            <div id="adult-prog-lora"></div>
+
+            <h3>二、分组查询注意力（GQA）—— 5题</h3>
+            <div id="adult-prog-gqa"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Concepts Summary -->
+      <div class="content-section">
+        <h2>第一轮核心知识点速查表</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>知识点</th>
+                <th>核心要点</th>
+                <th>关键词</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>掩码预测(MLM)</td>
+                <td>遮盖token后预测，学习双向上下文表征</td>
+                <td><span class="tag blue">BERT</span> <span class="tag blue">双向</span></td>
+              </tr>
+              <tr>
+                <td>解码器架构</td>
+                <td>自回归生成，GPT系列采用</td>
+                <td><span class="tag purple">GPT</span> <span class="tag purple">自回归</span></td>
+              </tr>
+              <tr>
+                <td>自注意力</td>
+                <td>Q/K/V来自同一输入的不同线性变换</td>
+                <td><span class="tag orange">QKV</span> <span class="tag orange">长距离</span></td>
+              </tr>
+              <tr>
+                <td>指令微调(SFT)</td>
+                <td>使用(指令,输出)配对数据，增强遵循指令能力</td>
+                <td><span class="tag green">监督</span> <span class="tag green">配对</span></td>
+              </tr>
+              <tr>
+                <td>提示词工程</td>
+                <td>明确角色、受众、约束，引导模型聚焦</td>
+                <td><span class="tag cyan">角色</span> <span class="tag cyan">约束</span></td>
+              </tr>
+              <tr>
+                <td>贪心搜索 vs 束搜索</td>
+                <td>束搜索维护多条路径，质量更好但计算更大</td>
+                <td><span class="tag red">解码</span> <span class="tag red">beam</span></td>
+              </tr>
+              <tr>
+                <td>人类对齐</td>
+                <td>使模型符合人类价值观、安全、有帮助</td>
+                <td><span class="tag blue">RLHF</span> <span class="tag blue">安全</span></td>
+              </tr>
+              <tr>
+                <td>思维链(CoT)</td>
+                <td>分步推理，提高可解释性和可靠性</td>
+                <td><span class="tag purple">推理</span> <span class="tag purple">分步</span></td>
+              </tr>
+              <tr>
+                <td>Pass@K</td>
+                <td>每个问题生成K个方案，至少1个通过即算解决</td>
+                <td><span class="tag orange">评测</span> <span class="tag orange">代码</span></td>
+              </tr>
+              <tr>
+                <td>困惑度</td>
+                <td>衡量预测不确定性，越低性能越好</td>
+                <td><span class="tag green">PPL</span> <span class="tag green">交叉熵</span></td>
+              </tr>
+              <tr>
+                <td>LoRA</td>
+                <td>旁并联低秩矩阵A/B，冻结原始权重</td>
+                <td><span class="tag cyan">低秩</span> <span class="tag cyan">q_proj</span> <span class="tag cyan">v_proj</span></td>
+              </tr>
+              <tr>
+                <td>DPO</td>
+                <td>直接偏好优化，省去训练奖励模型步骤</td>
+                <td><span class="tag red">偏好</span> <span class="tag red">无RM</span></td>
+              </tr>
+              <tr>
+                <td>vLLM</td>
+                <td>PagedAttention解决KV Cache内存碎片</td>
+                <td><span class="tag blue">分页</span> <span class="tag blue">高吞吐</span></td>
+              </tr>
+              <tr>
+                <td>MoE</td>
+                <td>混合专家模型，挑战是专家负载不均衡</td>
+                <td><span class="tag purple">专家</span> <span class="tag purple">路由</span></td>
+              </tr>
+              <tr>
+                <td>GQA</td>
+                <td>分组查询注意力，KV头数<查询头数，需扩展KV</td>
+                <td><span class="tag orange">共享</span> <span class="tag orange">expand</span></td>
+              </tr>
+              <tr>
+                <td>学习率预热</td>
+                <td>初期逐步增大学习率，防止梯度爆炸</td>
+                <td><span class="tag green">warmup</span> <span class="tag green">稳定</span></td>
+              </tr>
+              <tr>
+                <td>RAG</td>
+                <td>检索+生成，Embedding相似度检索文档</td>
+                <td><span class="tag cyan">检索</span> <span class="tag cyan">增强</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box warning">
+          <span class="icon">!</span>
+          <div class="content">
+            <strong>备考建议</strong>
+            <p>第二轮编程任务需要第一轮的理论基础。特别是：T1需要理解Prompt工程和模型推理（题目1-10的核心知识），T2需要理解Embedding模型和相似度计算（RAG程序题的核心知识）。建议重点复习RAG代码中的tokenizer、embedding、pooling、相似度等概念。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>LMCC 学习中心</h4>
+          <p>大模型编程认证备考学习平台</p>
+        </div>
+        <div>
+          <h4>学习导航</h4>
+          <p><a href="round1.html">第一轮备考</a></p>
+          <p><a href="round2.html">第二轮备考</a></p>
+          <p><a href="knowledge.html">知识库</a></p>
+          <p><a href="quiz.html">模拟测验</a></p>
+        </div>
+        <div>
+          <h4>技术参考</h4>
+          <p><a href="https://pytorch.org" target="_blank">PyTorch 文档</a></p>
+          <p><a href="https://huggingface.co/docs/transformers" target="_blank">Transformers 文档</a></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>LMCC Study Center | 基于真题制作 | 仅供学习交流</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/quiz-data.js"></script>
+  <script>
+    function renderQuestions(questions, containerId, startIdx, endIdx) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      let html = '';
+      for (let i = startIdx; i < endIdx && i < questions.length; i++) {
+        const q = questions[i];
+        html += '<div class="question-card">';
+        html += '<div class="question-title"><span class="question-number">' + q.id + '</span><span>' + escapeHtml(q.question) + '</span></div>';
+        if (q.code) {
+          html += '<div class="code-block"><div class="code-header"><span class="lang">Python</span></div><pre><code>' + escapeHtml(q.code) + '</code></pre></div>';
+        }
+        html += '<div class="options">';
+        for (const [key, value] of Object.entries(q.options)) {
+          if (key === q.answer) {
+            html += '<div class="option correct"><span class="opt-label">' + key + '.</span><span>' + escapeHtml(value) + '</span></div>';
+          } else {
+            html += '<div class="option"><span class="opt-label">' + key + '.</span><span>' + escapeHtml(value) + '</span></div>';
+          }
+        }
+        html += '</div>';
+        html += '<div class="answer-box"><div class="answer-label">答案: ' + q.answer + '</div><div class="explanation">' + escapeHtml(q.explanation) + '</div></div>';
+        html += '</div>';
+      }
+      container.innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Youth MCQ (20 questions)
+      renderQuestions(QUIZ_DATA.youth_mcq, 'youth-mcq-container', 0, 20);
+      // Youth Programming - RAG (Q21-25)
+      renderQuestions(QUIZ_DATA.youth_prog, 'youth-prog-rag', 0, 5);
+      // Youth Programming - LoRA (Q26-30)
+      renderQuestions(QUIZ_DATA.youth_prog, 'youth-prog-lora', 5, 10);
+      // Adult MCQ (20 questions)
+      renderQuestions(QUIZ_DATA.adult_mcq, 'adult-mcq-container', 0, 20);
+      // Adult Programming - LoRA (Q21-25)
+      renderQuestions(QUIZ_DATA.adult_prog, 'adult-prog-lora', 0, 5);
+      // Adult Programming - GQA (Q26-30)
+      renderQuestions(QUIZ_DATA.adult_prog, 'adult-prog-gqa', 5, 10);
+    });
+  </script>
+  <script src="js/main.js"></script>
+</body>
+</html>
