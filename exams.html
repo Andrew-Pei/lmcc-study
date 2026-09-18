@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历年真题 - LMCC学习中心</title>
+  <meta name="description" content="LMCC认证第一轮和第二轮完整真题解析">
+  <link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <span class="logo">L</span>
+      <span>LMCC 学习中心</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="resources.html">学习资源</a>
+      <a href="quiz.html">知识测验</a>
+      <a href="exams.html">历年真题</a>
+      <a href="plan.html">每周计划</a>
+    </div>
+    <button class="nav-toggle">☰</button>
+  </nav>
+
+  <div class="main-content">
+    <div class="page-header">
+      <div class="container">
+        <h1>历年真题</h1>
+        <p>LMCC认证完整真题与详细解析，按轮次划分</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Exam Overview -->
+      <div class="content-section">
+        <div class="info-box info">
+          <span class="icon">i</span>
+          <div class="content">
+            <strong>认证结构</strong>
+            <p>第一轮满分100分（60分单选+40分程序题），通过后进入第二轮。第二轮两道编程题各100分，总分200分。同学们已通过第一轮，当前备考重点是第二轮。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Round 1 -->
+      <div class="content-section">
+        <h2>第一轮认证真题</h2>
+        <p>包含青少年组和成人组的完整题目，每题附正确答案和详细解析。程序题含完整代码和知识点速查表。</p>
+        <div class="cards-grid">
+          <a href="round1.html" class="card" style="text-decoration: none;">
+            <div class="card-icon blue">R1</div>
+            <h3>第一轮真题详解</h3>
+            <p>青少年组：20道单选题 + 10道程序题（RAG检索 + LoRA微调）<br>成人组：20道单选题 + 10道程序题（LoRA + GQA注意力）</p>
+            <div>
+              <span class="tag blue">单选题40道</span>
+              <span class="tag blue">程序题20道</span>
+              <span class="tag blue">答案解析</span>
+            </div>
+            <span class="card-link">查看真题</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Round 2 -->
+      <div class="content-section">
+        <h2>第二轮认证真题</h2>
+        <p>第二轮编程实践题，需要调用PyTorch和Transformers库完成模型推理和数据处理。每题附完整参考代码和评分标准。</p>
+        <div class="cards-grid">
+          <a href="round2.html" class="card" style="text-decoration: none;">
+            <div class="card-icon orange">R2</div>
+            <h3>第二轮真题详解</h3>
+            <p>T1 小小数学助手：System Prompt设计 + 模型推理（100分）<br>T2 相似度计算与数据生成：Embedding + 余弦相似度 + 数据集（100分）</p>
+            <div>
+              <span class="tag orange">T1完整代码</span>
+              <span class="tag orange">T2完整代码</span>
+              <span class="tag orange">评分标准</span>
+            </div>
+            <span class="card-link">查看真题</span>
+          </a>
+        </div>
+
+        <div class="info-box warning">
+          <span class="icon">!</span>
+          <div class="content">
+            <strong>备考重点</strong>
+            <p>T2的compute_similarity函数必须满分才能进入第二部分（数据生成），否则总分上限50分。建议优先确保T2相似度计算正确，再练习T1的Prompt设计。考试日期：<strong>10月17日</strong>。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>LMCC 学习中心</h4>
+          <p>大模型编程认证备考学习平台</p>
+        </div>
+        <div>
+          <h4>学习导航</h4>
+          <p><a href="resources.html">学习资源</a></p>
+          <p><a href="quiz.html">知识测验</a></p>
+          <p><a href="exams.html">历年真题</a></p>
+          <p><a href="plan.html">每周计划</a></p>
+        </div>
+        <div>
+          <h4>技术参考</h4>
+          <p><a href="https://docs.python.org/3/" target="_blank">Python 文档</a></p>
+          <p><a href="https://pytorch.org" target="_blank">PyTorch 文档</a></p>
+          <p><a href="https://huggingface.co/docs/transformers" target="_blank">Transformers 文档</a></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>LMCC Study Center | 基于真题制作 | 仅供学习交流</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js?v=4"></script>
+</body>
+</html>

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>模拟测验 - LMCC学习中心</title>
-  <meta name="description" content="LMCC认证模拟测验系统，包含第一轮全部真题和第二轮知识点测验">
-  <link rel="stylesheet" href="css/style.css?v=3">
+  <title>知识测验 - LMCC学习中心</title>
+  <meta name="description" content="LMCC备考知识测验，按学习模块分类，随机抽题检验学习成果">
+  <link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
   <!-- Navigation -->
@@ -16,36 +16,128 @@
     </a>
     <div class="nav-links">
       <a href="index.html">首页</a>
-      <a href="round1.html">第一轮备考</a>
-      <a href="round2.html">第二轮备考</a>
-      <a href="knowledge.html">知识库</a>
-      <a href="quiz.html">模拟测验</a>
+      <a href="resources.html">学习资源</a>
+      <a href="quiz.html">知识测验</a>
+      <a href="exams.html">历年真题</a>
+      <a href="plan.html">每周计划</a>
     </div>
     <button class="nav-toggle">☰</button>
   </nav>
 
   <div class="main-content">
-    <!-- Page Header -->
     <div class="page-header">
       <div class="container">
-        <h1>模拟测验</h1>
-        <p>选择类别开始在线答题，即时反馈答案与解析</p>
+        <h1>知识测验</h1>
+        <p>针对每个学习模块从题库中随机抽题，检验学习成果</p>
       </div>
     </div>
 
     <div class="container">
-      <div class="content-section">
+      <!-- Quiz Selection -->
+      <div id="quiz-select" class="content-section">
         <div class="info-box info">
           <span class="icon">i</span>
           <div class="content">
             <strong>测验说明</strong>
-            <p>每次测验包含一组题目，选择答案后立即显示正确答案和详细解析。支持上一题/下一题导航，完成后显示总成绩和答题回顾。建议多次练习，确保每个知识点都理解透彻。</p>
+            <p>每个模块从题库中随机抽取题目，每次答题的题目和顺序都不同。答完可查看成绩回顾，支持反复练习。</p>
           </div>
         </div>
 
-        <div class="quiz-container" id="quiz-content">
-          <!-- Questions will be rendered here by quiz.js -->
+        <div class="cards-grid">
+          <div class="card quiz-card" onclick="startQuiz('python')">
+            <div class="card-icon blue">Py</div>
+            <h3>Python基础</h3>
+            <p>JSON处理、字符串操作、函数、类、正则表达式等</p>
+            <div>
+              <span class="tag blue">15题库</span>
+              <span class="tag blue">随机10题</span>
+            </div>
+            <button class="btn btn-primary">开始测验</button>
+          </div>
+
+          <div class="card quiz-card" onclick="startQuiz('pytorch')">
+            <div class="card-icon orange">PT</div>
+            <h3>PyTorch基础</h3>
+            <p>Tensor操作、模型推理、梯度管理、F.normalize等</p>
+            <div>
+              <span class="tag orange">15题库</span>
+              <span class="tag orange">随机10题</span>
+            </div>
+            <button class="btn btn-primary">开始测验</button>
+          </div>
+
+          <div class="card quiz-card" onclick="startQuiz('transformer')">
+            <div class="card-icon purple">TF</div>
+            <h3>Transformer基础</h3>
+            <p>自注意力机制、Tokenizer、Chat Template、模型推理</p>
+            <div>
+              <span class="tag purple">15题库</span>
+              <span class="tag purple">随机10题</span>
+            </div>
+            <button class="btn btn-primary">开始测验</button>
+          </div>
+
+          <div class="card quiz-card" onclick="startQuiz('prompt')">
+            <div class="card-icon green">PE</div>
+            <h3>提示词工程</h3>
+            <p>System Prompt设计、CoT思维链、格式约束、对齐</p>
+            <div>
+              <span class="tag green">12题库</span>
+              <span class="tag green">随机8题</span>
+            </div>
+            <button class="btn btn-primary">开始测验</button>
+          </div>
+
+          <div class="card quiz-card" onclick="startQuiz('round2')">
+            <div class="card-icon red">R2</div>
+            <h3>第二轮知识点</h3>
+            <p>T1数学助手和T2相似度计算的核心概念测验</p>
+            <div>
+              <span class="tag red">10题库</span>
+              <span class="tag red">全部作答</span>
+            </div>
+            <button class="btn btn-primary">开始测验</button>
+          </div>
         </div>
+      </div>
+
+      <!-- Quiz Interface -->
+      <div id="quiz-interface" style="display: none;">
+        <div class="quiz-header">
+          <button class="btn btn-outline" onclick="exitQuiz()">← 返回选择</button>
+          <div class="quiz-progress">
+            <span id="quiz-title">测验</span>
+            <span id="quiz-counter">第 0 / 0 题</span>
+          </div>
+          <div class="quiz-score">
+            得分: <span id="quiz-score">0</span>
+          </div>
+        </div>
+
+        <div class="quiz-progress-bar">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+
+        <div id="quiz-content"></div>
+
+        <div class="quiz-nav">
+          <button id="prev-btn" class="btn btn-outline" onclick="prevQuestion()">上一题</button>
+          <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()">下一题</button>
+          <button id="finish-btn" class="btn btn-primary" style="display: none;" onclick="finishQuiz()">查看成绩</button>
+        </div>
+      </div>
+
+      <!-- Quiz Results -->
+      <div id="quiz-results" style="display: none;">
+        <div class="quiz-result-header">
+          <h2 id="result-title">测验完成！</h2>
+          <div class="quiz-score-display">
+            <span id="final-score">0</span> / <span id="total-score">0</span>
+          </div>
+          <p id="result-message"></p>
+        </div>
+        <button class="btn btn-primary" onclick="exitQuiz()">再测一次</button>
+        <div id="result-review" class="mt-4"></div>
       </div>
     </div>
   </div>
@@ -60,15 +152,10 @@
         </div>
         <div>
           <h4>学习导航</h4>
-          <p><a href="round1.html">第一轮备考</a></p>
-          <p><a href="round2.html">第二轮备考</a></p>
-          <p><a href="knowledge.html">知识库</a></p>
-          <p><a href="quiz.html">模拟测验</a></p>
-        </div>
-        <div>
-          <h4>技术参考</h4>
-          <p><a href="https://pytorch.org" target="_blank">PyTorch 文档</a></p>
-          <p><a href="https://huggingface.co/docs/transformers" target="_blank">Transformers 文档</a></p>
+          <p><a href="resources.html">学习资源</a></p>
+          <p><a href="quiz.html">知识测验</a></p>
+          <p><a href="exams.html">历年真题</a></p>
+          <p><a href="plan.html">每周计划</a></p>
         </div>
       </div>
       <div class="footer-bottom">
@@ -77,8 +164,8 @@
     </div>
   </footer>
 
-  <script src="js/quiz-data.js?v=3"></script>
-  <script src="js/quiz.js?v=3"></script>
-  <script src="js/main.js?v=3"></script>
+  <script src="js/quiz-data.js?v=4"></script>
+  <script src="js/quiz.js?v=4"></script>
+  <script src="js/main.js?v=4"></script>
 </body>
 </html>

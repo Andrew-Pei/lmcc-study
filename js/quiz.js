@@ -1,267 +1,202 @@
-// ===== Quiz Engine =====
-let quizState = {
-  category: 'youth_mcq',
-  questions: [],
-  currentIdx: 0,
-  answers: {},
-  score: 0,
-  correctCount: 0,
-  wrongCount: 0,
-  showExplanations: false
-};
+// LMCC Quiz Engine - module-based with random selection
+(function() {
+  var currentModule = null;
+  var currentQuestions = [];
+  var currentIndex = 0;
+  var userAnswers = {};
+  var score = 0;
 
-function loadCategory(category) {
-  quizState.category = category;
-  quizState.questions = QUIZ_DATA[category] || [];
-  quizState.currentIdx = 0;
-  quizState.answers = {};
-  quizState.score = 0;
-  quizState.correctCount = 0;
-  quizState.wrongCount = 0;
-  quizState.showExplanations = false;
-  renderQuiz();
-}
-
-function renderQuiz() {
-  const container = document.getElementById('quiz-content');
-  if (!container) return;
-
-  if (quizState.currentIdx >= quizState.questions.length) {
-    renderResult();
-    return;
-  }
-
-  const q = quizState.questions[quizState.currentIdx];
-  const progress = ((quizState.currentIdx) / quizState.questions.length) * 100;
-
-  let html = `
-    <div class="quiz-progress-bar">
-      <div class="quiz-progress-fill" style="width: ${progress}%"></div>
-    </div>
-    <div class="quiz-header">
-      <span class="quiz-info">第 ${quizState.currentIdx + 1} / ${quizState.questions.length} 题</span>
-      <div class="quiz-score">
-        <span class="correct-count">正确: ${quizState.correctCount}</span>
-        <span class="wrong-count">错误: ${quizState.wrongCount}</span>
-      </div>
-    </div>
-    <div class="question-card" id="question-card">
-      <div class="question-title">
-        <span class="question-number">${q.id}</span>
-        <span>${q.question}</span>
-      </div>`;
-
-  if (q.code) {
-    html += `
-      <div class="code-block">
-        <div class="code-header"><span class="lang">Python</span></div>
-        <pre><code>${escapeHtml(q.code)}</code></pre>
-      </div>`;
-  }
-
-  html += `<div class="options" id="options-container">`;
-
-  for (const [key, value] of Object.entries(q.options)) {
-    html += `
-      <div class="option" data-option="${key}" onclick="selectOption('${key}')">
-        <span class="opt-label">${key}.</span>
-        <span>${escapeHtml(value)}</span>
-      </div>`;
-  }
-
-  html += `</div>`;
-
-  // Answer box (hidden initially)
-  html += `
-    <div class="answer-box hidden" id="answer-box">
-      <div class="answer-label">正确答案: ${q.answer}</div>
-      <div class="answer-text" id="user-answer"></div>
-      <div class="explanation">${q.explanation}</div>
-    </div>`;
-
-  // Navigation buttons
-  html += `
-    <div class="flex gap-2 mt-2" style="justify-content: space-between; align-items: center;">
-      <button class="btn btn-outline hidden" id="prev-btn" style="border-color: var(--border-color); color: var(--text-secondary);" onclick="prevQuestion()">
-        上一题
-      </button>
-      <button class="btn btn-primary hidden" id="next-btn" style="background: var(--primary); color: white;" onclick="nextQuestion()">
-        ${quizState.currentIdx + 1 < quizState.questions.length ? '下一题' : '查看结果'}
-      </button>
-    </div>
-  `;
-
-  html += `</div>`;
-
-  container.innerHTML = html;
-
-  // Restore previous answer if exists
-  if (quizState.answers[quizState.currentIdx]) {
-    const saved = quizState.answers[quizState.currentIdx];
-    showAnswer(saved.selected, q);
-  }
-}
-
-function selectOption(option) {
-  const q = quizState.questions[quizState.currentIdx];
-  const alreadyAnswered = quizState.answers[quizState.currentIdx] !== undefined;
-
-  if (alreadyAnswered) return;
-
-  quizState.answers[quizState.currentIdx] = { selected: option, correct: option === q.answer };
-
-  if (option === q.answer) {
-    quizState.correctCount++;
-  } else {
-    quizState.wrongCount++;
-  }
-
-  showAnswer(option, q);
-}
-
-function showAnswer(selected, q) {
-  const options = document.querySelectorAll('.option');
-  options.forEach(function(opt) {
-    const key = opt.getAttribute('data-option');
-    opt.style.cursor = 'default';
-
-    if (key === q.answer) {
-      opt.classList.add('correct');
-    } else if (key === selected && key !== q.answer) {
-      opt.classList.add('incorrect');
-    }
-  });
-
-  const answerBox = document.getElementById('answer-box');
-  const userAnswerEl = document.getElementById('user-answer');
-  const nextBtn = document.getElementById('next-btn');
-  const prevBtn = document.getElementById('prev-btn');
-
-  if (answerBox && userAnswerEl && nextBtn) {
-    if (selected === q.answer) {
-      userAnswerEl.innerHTML = '<strong style="color: var(--success);">你的答案: ' + selected + ' (正确!)</strong>';
-    } else {
-      userAnswerEl.innerHTML = '<strong style="color: var(--danger);">你的答案: ' + selected + ' (错误)</strong>';
-    }
-    answerBox.classList.remove('hidden');
-    nextBtn.classList.remove('hidden');
-    if (quizState.currentIdx > 0) {
-      prevBtn.classList.remove('hidden');
-    }
-  }
-}
-
-function nextQuestion() {
-  quizState.currentIdx++;
-  renderQuiz();
-}
-
-function prevQuestion() {
-  if (quizState.currentIdx > 0) {
-    quizState.currentIdx--;
-    renderQuiz();
-  }
-}
-
-function renderResult() {
-  const container = document.getElementById('quiz-content');
-  const total = quizState.questions.length;
-  const score = Math.round((quizState.correctCount / total) * 100);
-  const passed = score >= 60;
-
-  const categoryNames = {
-    'youth_mcq': '第一轮-青少年组-单选题',
-    'youth_prog': '第一轮-青少年组-程序题',
-    'adult_mcq': '第一轮-成人组-单选题',
-    'adult_prog': '第一轮-成人组-程序题',
-    'round2_concepts': '第二轮-知识点测验'
+  var moduleConfig = {
+    python:       { name: 'Python基础',       drawCount: 10 },
+    pytorch:      { name: 'PyTorch基础',      drawCount: 10 },
+    transformer:  { name: 'Transformer基础',  drawCount: 10 },
+    prompt:       { name: '提示词工程',        drawCount: 8 },
+    round2:       { name: '第二轮知识点',      drawCount: 10 }
   };
 
-  let html = `
-    <div class="quiz-result">
-      <div class="score-circle ${passed ? 'pass' : 'fail'}">${score}分</div>
-      <h2>${passed ? '恭喜通过!' : '继续努力!'}</h2>
-      <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-        ${categoryNames[quizState.category] || '测验'}
-      </p>
-      <div class="quiz-score" style="justify-content: center; margin-bottom: 2rem;">
-        <span class="correct-count">正确: ${quizState.correctCount}题</span>
-        <span class="wrong-count">错误: ${quizState.wrongCount}题</span>
-        <span style="color: var(--text-secondary);">总计: ${total}题</span>
-      </div>
-      <div class="flex gap-2" style="justify-content: center; flex-wrap: wrap;">
-        <button class="btn btn-primary" style="background: var(--primary); color: white;" onclick="restartQuiz()">重新测验</button>
-        <button class="btn btn-outline" style="border-color: var(--border-color); color: var(--text-secondary);" onclick="goToCategorySelect()">选择其他类别</button>
-      </div>
-    </div>
+  function shuffleArray(arr) {
+    var result = arr.slice();
+    for (var i = result.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = result[i];
+      result[i] = result[j];
+      result[j] = temp;
+    }
+    return result;
+  }
 
-    <div style="margin-top: 2rem;">
-      <h3 style="margin-bottom: 1rem;">答题回顾</h3>`;
+  window.startQuiz = function(module) {
+    var bank = QUIZ_DATA[module] || [];
+    if (bank.length === 0) return;
 
-  quizState.questions.forEach(function(q, idx) {
-    const ans = quizState.answers[idx];
-    if (!ans) return;
+    var config = moduleConfig[module] || { name: module, drawCount: bank.length };
+    var drawCount = Math.min(config.drawCount, bank.length);
 
-    const isCorrect = ans.correct;
-    html += `
-      <div class="question-card" style="margin-bottom: 0.75rem;">
-        <div class="question-title">
-          <span class="question-number">${q.id}</span>
-          <span>${q.question.substring(0, 100)}${q.question.length > 100 ? '...' : ''}</span>
-        </div>
-        <div class="flex gap-2" style="flex-wrap: wrap;">
-          <span class="tag ${isCorrect ? 'green' : 'red'}">${isCorrect ? '正确' : '错误'}</span>
-          <span class="tag blue">你的答案: ${ans.selected}</span>
-          <span class="tag green">正确答案: ${q.answer}</span>
-        </div>
-      </div>`;
-  });
+    // Random selection: shuffle the bank and take first drawCount
+    currentQuestions = shuffleArray(bank).slice(0, drawCount);
+    currentModule = module;
+    currentIndex = 0;
+    userAnswers = {};
+    score = 0;
 
-  html += `</div>`;
+    // Show quiz interface
+    document.getElementById('quiz-select').style.display = 'none';
+    document.getElementById('quiz-results').style.display = 'none';
+    document.getElementById('quiz-interface').style.display = 'block';
 
-  container.innerHTML = html;
-}
+    document.getElementById('quiz-title').textContent = config.name;
+    updateScore();
 
-function restartQuiz() {
-  loadCategory(quizState.category);
-}
+    renderQuestion();
+  };
 
-function goToCategorySelect() {
-  const container = document.getElementById('quiz-content');
-  const categories = [
-    { id: 'youth_mcq', name: '第一轮-青少年组-单选题', desc: '20道单选题，每题3分', count: 20, tag: 'blue' },
-    { id: 'youth_prog', name: '第一轮-青少年组-程序题', desc: '10道程序填空题，每题4分', count: 10, tag: 'purple' },
-    { id: 'adult_mcq', name: '第一轮-成人组-单选题', desc: '20道单选题（含进阶内容）', count: 20, tag: 'orange' },
-    { id: 'adult_prog', name: '第一轮-成人组-程序题', desc: '10道程序题（LoRA+GQA）', count: 10, tag: 'cyan' },
-    { id: 'round2_concepts', name: '第二轮-知识点测验', desc: '10道第二轮核心概念题', count: 10, tag: 'green' }
-  ];
+  function renderQuestion() {
+    var q = currentQuestions[currentIndex];
+    if (!q) return;
 
-  let html = '<div style="text-align: center; padding: 2rem 0;"><h2>选择测验类别</h2><p style="color: var(--text-secondary); margin-top: 0.5rem;">选择一个类别开始模拟考试</p></div><div class="cards-grid">';
+    document.getElementById('quiz-counter').textContent =
+      '第 ' + (currentIndex + 1) + ' / ' + currentQuestions.length + ' 题';
 
-  categories.forEach(function(cat) {
-    html += `
-      <div class="card" style="cursor: pointer;" onclick="loadCategory('${cat.id}')">
-        <div class="card-icon ${cat.tag}">${cat.count}</div>
-        <h3>${cat.name}</h3>
-        <p>${cat.desc}</p>
-        <span class="card-link">开始测验</span>
-      </div>`;
-  });
+    var progress = ((currentIndex + 1) / currentQuestions.length) * 100;
+    document.getElementById('progress-fill').style.width = progress + '%';
 
-  html += '</div>';
-  container.innerHTML = html;
-}
+    var content = document.getElementById('quiz-content');
+    var optionsHtml = '';
+    var optionKeys = ['A', 'B', 'C', 'D'];
 
-function escapeHtml(text) {
-  if (!text) return '';
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
+    optionKeys.forEach(function(key) {
+      if (q.options[key]) {
+        var selected = userAnswers[currentIndex] === key;
+        var showResult = userAnswers[currentIndex] !== undefined;
+        var cls = 'quiz-option';
+        if (showResult) {
+          if (key === q.answer) cls += ' correct';
+          else if (selected) cls += ' incorrect';
+        }
+        optionsHtml +=
+          '<div class="' + cls + '" onclick="selectAnswer(' + currentIndex + ', \'' + key + '\')">' +
+          '<span class="option-letter">' + key + '</span>' +
+          '<span class="option-text">' + escapeHtml(q.options[key]) + '</span>' +
+          '</div>';
+      }
+    });
 
-document.addEventListener('DOMContentLoaded', function() {
-  goToCategorySelect();
-});
+    var explanationHtml = '';
+    if (userAnswers[currentIndex] !== undefined) {
+      var isCorrect = userAnswers[currentIndex] === q.answer;
+      explanationHtml =
+        '<div class="quiz-explanation ' + (isCorrect ? 'correct' : 'incorrect') + '">' +
+        '<strong>' + (isCorrect ? '正确！' : '错误') + '</strong> ' +
+        '正确答案: ' + q.answer + '<br>' +
+        escapeHtml(q.explanation) +
+        '</div>';
+    }
+
+    content.innerHTML =
+      '<div class="quiz-question">' +
+      '<div class="quiz-question-text">' + escapeHtml(q.question) + '</div>' +
+      '<div class="quiz-options">' + optionsHtml + '</div>' +
+      explanationHtml +
+      '</div>';
+
+    // Update nav buttons
+    document.getElementById('prev-btn').disabled = currentIndex === 0;
+    var nextBtn = document.getElementById('next-btn');
+    var finishBtn = document.getElementById('finish-btn');
+    if (currentIndex === currentQuestions.length - 1) {
+      nextBtn.style.display = 'none';
+      finishBtn.style.display = 'inline-block';
+    } else {
+      nextBtn.style.display = 'inline-block';
+      finishBtn.style.display = 'none';
+    }
+
+    // Re-apply syntax highlighting to any code blocks in the question
+    if (window.SyntaxHighlighter) {
+      window.SyntaxHighlighter.highlightAll(content);
+    }
+  }
+
+  window.selectAnswer = function(qIndex, option) {
+    if (userAnswers[qIndex] !== undefined) return; // already answered
+
+    userAnswers[qIndex] = option;
+    var q = currentQuestions[qIndex];
+    if (option === q.answer) {
+      score++;
+    }
+    updateScore();
+    renderQuestion();
+  };
+
+  window.prevQuestion = function() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      renderQuestion();
+    }
+  };
+
+  window.nextQuestion = function() {
+    if (currentIndex < currentQuestions.length - 1) {
+      currentIndex++;
+      renderQuestion();
+    }
+  };
+
+  window.finishQuiz = function() {
+    // Count answered
+    var answered = 0;
+    for (var k in userAnswers) answered++;
+
+    var total = currentQuestions.length;
+    var config = moduleConfig[currentModule] || { name: currentModule };
+
+    document.getElementById('quiz-interface').style.display = 'none';
+    document.getElementById('quiz-results').style.display = 'block';
+
+    document.getElementById('result-title').textContent = config.name + ' - 测验完成！';
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('total-score').textContent = total;
+
+    var pct = (score / total) * 100;
+    var msg = '';
+    if (pct === 100) msg = '满分！完美掌握！';
+    else if (pct >= 80) msg = '优秀！知识点掌握扎实';
+    else if (pct >= 60) msg = '及格，继续巩固薄弱点';
+    else msg = '需要加强复习，建议重学对应模块';
+    document.getElementById('result-message').textContent = msg;
+
+    // Review
+    var reviewHtml = '<h3>答题回顾</h3>';
+    currentQuestions.forEach(function(q, i) {
+      var userAns = userAnswers[i] || '未答';
+      var isCorrect = userAns === q.answer;
+      reviewHtml +=
+        '<div class="quiz-review-item ' + (isCorrect ? 'correct' : 'incorrect') + '">' +
+        '<div class="review-question"><strong>Q' + (i + 1) + '.</strong> ' + escapeHtml(q.question) + '</div>' +
+        '<div class="review-answer">你的答案: ' + userAns + ' | 正确答案: ' + q.answer + '</div>' +
+        '<div class="review-explanation">' + escapeHtml(q.explanation) + '</div>' +
+        '</div>';
+    });
+    document.getElementById('result-review').innerHTML = reviewHtml;
+  };
+
+  window.exitQuiz = function() {
+    document.getElementById('quiz-select').style.display = 'block';
+    document.getElementById('quiz-interface').style.display = 'none';
+    document.getElementById('quiz-results').style.display = 'none';
+  };
+
+  function updateScore() {
+    var el = document.getElementById('quiz-score');
+    if (el) el.textContent = score;
+  }
+
+  function escapeHtml(text) {
+    if (typeof text !== 'string') return text;
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+})();
