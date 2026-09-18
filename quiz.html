@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>知识测验 - LMCC学习中心</title>
   <meta name="description" content="LMCC备考知识测验，按学习模块分类，随机抽题检验学习成果">
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
-  <!-- Navigation -->
   <nav class="navbar">
     <a href="index.html" class="nav-brand">
       <span class="logo">L</span>
@@ -39,7 +38,7 @@
           <span class="icon">i</span>
           <div class="content">
             <strong>测验说明</strong>
-            <p>每个模块从题库中随机抽取题目，每次答题的题目和顺序都不同。答完可查看成绩回顾，支持反复练习。</p>
+            <p>每个模块从题库中随机抽取题目，每次答题的题目和顺序都不同。选择后即时反馈答案与解析，答完可查看成绩回顾。支持反复练习，巩固薄弱点。</p>
           </div>
         </div>
 
@@ -47,7 +46,7 @@
           <div class="card quiz-card" onclick="startQuiz('python')">
             <div class="card-icon blue">Py</div>
             <h3>Python基础</h3>
-            <p>JSON处理、字符串操作、函数、类、正则表达式等</p>
+            <p>JSON处理、字符串操作、函数、类、正则表达式等核心Python技能</p>
             <div>
               <span class="tag blue">15题库</span>
               <span class="tag blue">随机10题</span>
@@ -58,7 +57,7 @@
           <div class="card quiz-card" onclick="startQuiz('pytorch')">
             <div class="card-icon orange">PT</div>
             <h3>PyTorch基础</h3>
-            <p>Tensor操作、模型推理、梯度管理、F.normalize等</p>
+            <p>Tensor操作、模型推理、梯度管理、F.normalize等深度学习框架技能</p>
             <div>
               <span class="tag orange">15题库</span>
               <span class="tag orange">随机10题</span>
@@ -69,7 +68,7 @@
           <div class="card quiz-card" onclick="startQuiz('transformer')">
             <div class="card-icon purple">TF</div>
             <h3>Transformer基础</h3>
-            <p>自注意力机制、Tokenizer、Chat Template、模型推理</p>
+            <p>自注意力机制、Tokenizer、Chat Template、模型推理流程</p>
             <div>
               <span class="tag purple">15题库</span>
               <span class="tag purple">随机10题</span>
@@ -80,7 +79,7 @@
           <div class="card quiz-card" onclick="startQuiz('prompt')">
             <div class="card-icon green">PE</div>
             <h3>提示词工程</h3>
-            <p>System Prompt设计、CoT思维链、格式约束、对齐</p>
+            <p>System Prompt设计、CoT思维链、格式约束、模型对齐</p>
             <div>
               <span class="tag green">12题库</span>
               <span class="tag green">随机8题</span>
@@ -104,25 +103,25 @@
       <!-- Quiz Interface -->
       <div id="quiz-interface" style="display: none;">
         <div class="quiz-header">
-          <button class="btn btn-outline" onclick="exitQuiz()">← 返回选择</button>
+          <button class="btn btn-outline" onclick="exitQuiz()" style="color: var(--text-secondary); border-color: var(--border-color);">&larr; 返回</button>
           <div class="quiz-progress">
-            <span id="quiz-title">测验</span>
-            <span id="quiz-counter">第 0 / 0 题</span>
+            <span id="quiz-title" class="quiz-title">测验</span>
+            <span id="quiz-counter" class="quiz-counter">第 0 / 0 题</span>
           </div>
-          <div class="quiz-score">
-            得分: <span id="quiz-score">0</span>
+          <div class="quiz-score-badge">
+            <span id="quiz-score">0</span> 分
           </div>
         </div>
 
         <div class="quiz-progress-bar">
-          <div id="progress-fill" class="progress-fill"></div>
+          <div id="progress-fill" class="progress-fill" style="width: 0%;"></div>
         </div>
 
         <div id="quiz-content"></div>
 
         <div class="quiz-nav">
-          <button id="prev-btn" class="btn btn-outline" onclick="prevQuestion()">上一题</button>
-          <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()">下一题</button>
+          <button id="prev-btn" class="btn btn-outline" onclick="prevQuestion()" style="color: var(--text-secondary); border-color: var(--border-color);">&larr; 上一题</button>
+          <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()">下一题 &rarr;</button>
           <button id="finish-btn" class="btn btn-primary" style="display: none;" onclick="finishQuiz()">查看成绩</button>
         </div>
       </div>
@@ -134,15 +133,16 @@
           <div class="quiz-score-display">
             <span id="final-score">0</span> / <span id="total-score">0</span>
           </div>
-          <p id="result-message"></p>
+          <p id="result-message" style="font-size: 1.1rem; color: var(--text-secondary);"></p>
         </div>
-        <button class="btn btn-primary" onclick="exitQuiz()">再测一次</button>
-        <div id="result-review" class="mt-4"></div>
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <button class="btn btn-primary" onclick="exitQuiz()" style="font-size: 1.05rem; padding: 0.85rem 2rem;">再测一次</button>
+        </div>
+        <div id="result-review"></div>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
@@ -157,6 +157,12 @@
           <p><a href="exams.html">历年真题</a></p>
           <p><a href="plan.html">每周计划</a></p>
         </div>
+        <div>
+          <h4>技术参考</h4>
+          <p><a href="https://docs.python.org/3/" target="_blank">Python 文档</a></p>
+          <p><a href="https://pytorch.org" target="_blank">PyTorch 文档</a></p>
+          <p><a href="https://huggingface.co/docs/transformers" target="_blank">Transformers 文档</a></p>
+        </div>
       </div>
       <div class="footer-bottom">
         <p>LMCC Study Center | 基于真题制作 | 仅供学习交流</p>
@@ -164,8 +170,8 @@
     </div>
   </footer>
 
-  <script src="js/quiz-data.js?v=4"></script>
-  <script src="js/quiz.js?v=4"></script>
-  <script src="js/main.js?v=4"></script>
+  <script src="js/quiz-data.js?v=5"></script>
+  <script src="js/quiz.js?v=5"></script>
+  <script src="js/main.js?v=5"></script>
 </body>
 </html>

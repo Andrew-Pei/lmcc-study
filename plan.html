@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>每周计划 - LMCC学习中心</title>
   <meta name="description" content="LMCC第二轮备考四周计划，从9月18日到10月17日考试日">
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
-  <!-- Navigation -->
   <nav class="navbar">
     <a href="index.html" class="nav-brand">
       <span class="logo">L</span>
@@ -33,16 +32,8 @@
     </div>
 
     <div class="container">
-      <!-- Timeline Overview -->
+      <!-- Weekly Overview -->
       <div class="content-section">
-        <div class="info-box info">
-          <span class="icon">i</span>
-          <div class="content">
-            <strong>备考时间线</strong>
-            <p>今天 <strong>9月18日</strong>，距 <strong>10月17日</strong> 考试约 <strong id="days-left">29</strong> 天。计划分4周推进，从基础知识到真题实战，循序渐进。</p>
-          </div>
-        </div>
-
         <div class="table-wrapper">
           <table>
             <thead>
@@ -88,63 +79,13 @@
       <div class="content-section" id="week1">
         <h2><span class="tag blue">第一周</span> 9.18 - 9.24：基础夯实</h2>
         <p><strong>目标：</strong>掌握Python核心语法和PyTorch基本操作，能读写模型推理代码。</p>
-
-        <h3>每日安排</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead><tr><th>日期</th><th>学习内容</th><th>配套资源</th><th>检验</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>9.18（周四）</td>
-                <td>Python数据类型、运算、字符串操作</td>
-                <td><a href="resources.html#python">Python基础模块</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>9.19（周五）</td>
-                <td>Python函数、类、文件操作、JSON处理</td>
-                <td><a href="resources.html#python">Python基础模块</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>9.20（周六）</td>
-                <td>Python正则表达式、列表推导式、实战练习</td>
-                <td><a href="resources.html#python">Python官方教程</a></td>
-                <td><a href="quiz.html" onclick="localStorage.setItem('targetQuiz','python');">Python测验</a></td>
-              </tr>
-              <tr>
-                <td>9.21（周日）</td>
-                <td>PyTorch Tensor创建与操作、设备管理</td>
-                <td><a href="resources.html#pytorch">PyTorch基础模块</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>9.22（周一）</td>
-                <td>torch.no_grad、model加载、前向传播</td>
-                <td><a href="resources.html#pytorch">PyTorch官方教程</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>9.23（周二）</td>
-                <td>F.normalize、softmax、矩阵运算</td>
-                <td><a href="resources.html#pytorch">PyTorch API文档</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>9.24（周三）</td>
-                <td>model.generate()参数详解、推理流程</td>
-                <td><a href="resources.html#pytorch">generate文档</a></td>
-                <td><a href="quiz.html" onclick="localStorage.setItem('targetQuiz','pytorch');">PyTorch测验</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
+        <p><strong>学习内容：</strong>Python数据类型与运算、字符串操作、函数与类、文件操作与JSON处理、正则表达式。PyTorch Tensor创建与操作、设备管理、torch.no_grad、模型加载与前向传播、F.normalize与softmax、model.generate()参数详解。</p>
+        <p><strong>配套资源：</strong><a href="resources.html#python">Python基础模块</a> | <a href="resources.html#pytorch">PyTorch基础模块</a> | <a href="https://andrew-pei.github.io/python-learning/" target="_blank">我校Python学习网站</a></p>
         <div class="info-box success">
           <span class="icon">i</span>
           <div class="content">
             <strong>本周里程碑</strong>
-            <p>能独立写出：读取JSONL文件、创建Tensor、加载模型、执行前向传播获取hidden state的代码。通过Python和PyTorch测验（正确率≥80%）。</p>
+            <p>能独立写出：读取JSONL文件、创建Tensor、加载模型、执行前向传播获取hidden state的代码。通过<a href="quiz.html">Python和PyTorch测验</a>（正确率≥80%）。</p>
           </div>
         </div>
       </div>
@@ -153,63 +94,13 @@
       <div class="content-section" id="week2">
         <h2><span class="tag purple">第二周</span> 9.25 - 10.1：核心进阶</h2>
         <p><strong>目标：</strong>理解Transformer架构和注意力机制，掌握Tokenizer和Chat Template，能编写System Prompt。</p>
-
-        <h3>每日安排</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead><tr><th>日期</th><th>学习内容</th><th>配套资源</th><th>检验</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>9.25（周四）</td>
-                <td>Transformer架构：编码器/解码器/编码器-解码器</td>
-                <td><a href="resources.html#transformer">李沐Transformer精读</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>9.26（周五）</td>
-                <td>自注意力机制：QKV投影、缩放点积、softmax</td>
-                <td><a href="resources.html#transformer">注意力机制可视化</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>9.27（周六）</td>
-                <td>GQA分组查询注意力、因果掩码</td>
-                <td><a href="resources.html#transformer">原始论文</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>9.28（周日）</td>
-                <td>AutoTokenizer、apply_chat_template</td>
-                <td><a href="resources.html#transformer">Chat Template指南</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>9.29（周一）</td>
-                <td>add_generation_prompt、enable_thinking</td>
-                <td><a href="resources.html#transformer">Qwen3文档</a></td>
-                <td><a href="quiz.html" onclick="localStorage.setItem('targetQuiz','transformer');">Transformer测验</a></td>
-              </tr>
-              <tr>
-                <td>9.30（周二）</td>
-                <td>提示词工程：角色设定、格式约束、CoT</td>
-                <td><a href="resources.html#prompt">吴恩达Prompt课</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>10.1（周三）</td>
-                <td>System Prompt设计：符号映射、分步计算、输出格式</td>
-                <td><a href="resources.html#prompt">提示工程指南</a></td>
-                <td><a href="quiz.html" onclick="localStorage.setItem('targetQuiz','prompt');">提示词测验</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
+        <p><strong>学习内容：</strong>Transformer架构（编码器/解码器）、自注意力机制（QKV投影、缩放点积、softmax）、GQA分组查询注意力与因果掩码、AutoTokenizer与apply_chat_template、add_generation_prompt与enable_thinking、提示词工程（角色设定、格式约束、CoT）、System Prompt设计（符号映射、分步计算、输出格式）。</p>
+        <p><strong>配套资源：</strong><a href="resources.html#transformer">Transformer基础模块</a> | <a href="resources.html#prompt">提示词工程模块</a> | <a href="https://www.bilibili.com/video/BV1pu411o7BE/" target="_blank">李沐Transformer精读</a></p>
         <div class="info-box success">
           <span class="icon">i</span>
           <div class="content">
             <strong>本周里程碑</strong>
-            <p>理解QKV注意力计算流程，能使用apply_chat_template构造对话输入，能编写包含符号映射和格式约束的System Prompt。通过Transformer和提示词测验。</p>
+            <p>理解QKV注意力计算流程，能使用apply_chat_template构造对话输入，能编写包含符号映射和格式约束的System Prompt。通过<a href="quiz.html">Transformer和提示词测验</a>。</p>
           </div>
         </div>
       </div>
@@ -218,58 +109,8 @@
       <div class="content-section" id="week3">
         <h2><span class="tag orange">第三周</span> 10.2 - 10.8：真题实战</h2>
         <p><strong>目标：</strong>完整实现T1和T2的submission.py，确保compute_similarity函数满分。</p>
-
-        <h3>每日安排</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead><tr><th>日期</th><th>学习内容</th><th>配套资源</th><th>检验</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>10.2（周四）</td>
-                <td>T1: build_system_prompt()设计</td>
-                <td><a href="round2.html">第二轮真题T1</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>10.3（周五）</td>
-                <td>T1: apply_chat_template_single + generate_single</td>
-                <td><a href="round2.html">第二轮真题T1</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>10.4（周六）</td>
-                <td>T1: 批量推理generate_batch，padding处理</td>
-                <td><a href="round2.html">第二轮真题T1</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>10.5（周日）</td>
-                <td>T1: 完整实现测试，检查答案格式</td>
-                <td><a href="round2.html">第二轮真题T1</a></td>
-                <td><a href="quiz.html" onclick="localStorage.setItem('targetQuiz','round2');">第二轮测验</a></td>
-              </tr>
-              <tr>
-                <td>10.6（周一）</td>
-                <td>T2: compute_similarity函数实现</td>
-                <td><a href="round2.html">第二轮真题T2</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>10.7（周二）</td>
-                <td>T2: last-token pooling + L2归一化 + 余弦相似度</td>
-                <td><a href="round2.html">第二轮真题T2</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>10.8（周三）</td>
-                <td>T2: 数据生成策略，确保平均相似度≤0.5</td>
-                <td><a href="round2.html">第二轮真题T2</a></td>
-                <td>—</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
+        <p><strong>学习内容：</strong>T1：build_system_prompt()设计、apply_chat_template_single与generate_single、批量推理generate_batch与padding处理、完整实现测试。T2：compute_similarity函数实现、last-token pooling与L2归一化与余弦相似度、数据生成策略确保平均相似度≤0.5。</p>
+        <p><strong>配套资源：</strong><a href="round2.html">第二轮真题详解</a></p>
         <div class="info-box warning">
           <span class="icon">!</span>
           <div class="content">
@@ -283,58 +124,8 @@
       <div class="content-section" id="week4">
         <h2><span class="tag red">第四周</span> 10.9 - 10.15：模拟冲刺</h2>
         <p><strong>目标：</strong>限时完成完整submission，查漏补缺，确保考试日能稳定输出。</p>
-
-        <h3>每日安排</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead><tr><th>日期</th><th>学习内容</th><th>配套资源</th><th>检验</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>10.9（周四）</td>
-                <td>限时模拟T1（2小时内完成）</td>
-                <td><a href="round2.html">第二轮真题</a></td>
-                <td>限时自测</td>
-              </tr>
-              <tr>
-                <td>10.10（周五）</td>
-                <td>限时模拟T2（2小时内完成）</td>
-                <td><a href="round2.html">第二轮真题</a></td>
-                <td>限时自测</td>
-              </tr>
-              <tr>
-                <td>10.11（周六）</td>
-                <td>复盘模拟问题，修复bug</td>
-                <td><a href="resources.html">学习资源</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>10.12（周日）</td>
-                <td>回顾第一轮真题重点（理论巩固）</td>
-                <td><a href="round1.html">第一轮真题</a></td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>10.13（周一）</td>
-                <td>薄弱模块专项强化 + 知识测验</td>
-                <td><a href="quiz.html">知识测验</a></td>
-                <td>全部模块测验</td>
-              </tr>
-              <tr>
-                <td>10.14（周二）</td>
-                <td>完整模拟（T1+T2共4小时）</td>
-                <td><a href="round2.html">第二轮真题</a></td>
-                <td>完整模拟</td>
-              </tr>
-              <tr>
-                <td>10.15（周三）</td>
-                <td>复盘模拟，整理最终代码模板</td>
-                <td>—</td>
-                <td>—</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
+        <p><strong>学习内容：</strong>限时模拟T1（2小时内完成）、限时模拟T2（2小时内完成）、复盘模拟问题修复bug、回顾第一轮真题重点、薄弱模块专项强化与知识测验、完整模拟（T1+T2共4小时）、复盘模拟整理最终代码模板。</p>
+        <p><strong>配套资源：</strong><a href="round2.html">第二轮真题</a> | <a href="round1.html">第一轮真题</a> | <a href="quiz.html">知识测验</a></p>
         <div class="info-box success">
           <span class="icon">i</span>
           <div class="content">
@@ -388,7 +179,6 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
@@ -416,16 +206,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=4"></script>
-  <script>
-    // Calculate days left
-    (function() {
-      var examDate = new Date('2026-10-17T00:00:00+08:00');
-      var now = new Date();
-      var diff = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
-      var el = document.getElementById('days-left');
-      if (el) el.textContent = diff > 0 ? diff : 0;
-    })();
-  </script>
+  <script src="js/main.js?v=5"></script>
 </body>
 </html>
