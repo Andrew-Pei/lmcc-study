@@ -1,8 +1,8 @@
 // ===== Navigation =====
 document.addEventListener('DOMContentLoaded', function() {
-  const navbar = document.querySelector('.navbar');
-  const navToggle = document.querySelector('.nav-toggle');
-  const navLinks = document.querySelector('.nav-links');
+  var navbar = document.querySelector('.navbar');
+  var navToggle = document.querySelector('.nav-toggle');
+  var navLinks = document.querySelector('.nav-links');
 
   if (navbar) {
     window.addEventListener('scroll', function() {
@@ -21,100 +21,124 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Highlight active nav link
-  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+  var currentPath = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a').forEach(function(link) {
-    const href = link.getAttribute('href');
+    var href = link.getAttribute('href');
     if (href === currentPath || (currentPath === 'index.html' && href === 'index.html')) {
       link.classList.add('active');
     }
   });
 
   // Tab functionality
-  const tabs = document.querySelectorAll('.tab');
+  var tabs = document.querySelectorAll('.tab');
   tabs.forEach(function(tab) {
     tab.addEventListener('click', function() {
-      const target = this.getAttribute('data-tab');
-      const tabGroup = this.closest('.tabs-container') || document;
+      var target = this.getAttribute('data-tab');
+      var tabGroup = this.closest('.tabs-container') || document;
 
       tabGroup.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
       this.classList.add('active');
 
       tabGroup.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-      const panel = tabGroup.querySelector('#' + target);
+      var panel = tabGroup.querySelector('#' + target);
       if (panel) panel.classList.add('active');
     });
   });
 
-  // ===== Syntax Highlighting (safe tokenizer approach) =====
+  // ===== Syntax Highlighting (single-pass tokenizer, no regex interference) =====
   function highlightCode(element) {
-    // Use textContent to get raw text, avoiding any HTML in the source
     var text = element.textContent;
 
-    // Escape HTML entities first
-    text = text.replace(/&/g, '&amp;')
-               .replace(/</g, '&lt;')
-               .replace(/>/g, '&gt;');
+    // Escape HTML entities
+    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-    var keywords = ['def', 'class', 'import', 'from', 'return', 'if', 'else', 'elif', 'for', 'while', 'with', 'as', 'try', 'except', 'finally', 'raise', 'yield', 'lambda', 'None', 'True', 'False', 'and', 'or', 'not', 'in', 'is', 'pass', 'break', 'continue', 'global', 'nonlocal', 'assert', 'del', 'async', 'await'];
+    var kwSet = ['def','class','import','from','return','if','else','elif','for','while','with','as','try','except','finally','raise','yield','lambda','None','True','False','and','or','not','in','is','pass','break','continue','global','nonlocal','assert','del','async','await'];
+    var kwMap = {};
+    kwSet.forEach(function(k) { kwMap[k] = true; });
 
-    // Use placeholders to extract strings and comments first,
-    // so later regexes don't touch their contents
-    var placeholders = [];
+    // Single-pass: match tokens in priority order using alternation
+    // Group 1: triple-quoted strings
+    // Group 2: single/double quoted strings
+    // Group 3: comments
+    // Group 4: numbers
+    // Group 5: identifiers/keywords
+    // Group 6: everything else (operators, punctuation, whitespace)
+    var masterRe = /("""[\s\S]*?"""|'''[\s\S]*?''')|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(#[^\n]*)|(\d+\.?\d*)|([A-Za-z_]\w*)|([\s\S])/g;
 
-    // 1. Extract triple-quoted strings
-    text = text.replace(/("""[\s\S]*?"""|'''[\s\S]*?''')/g, function(m) {
-      placeholders.push('<span class="str">' + m + '</span>');
-      return '\x00' + (placeholders.length - 1) + '\x00';
-    });
+    var result = '';
+    var match;
+    while ((match = masterRe.exec(text)) !== null) {
+      if (match[1]) {
+        // Triple-quoted string
+        result += '<span class="str">' + match[1] + '</span>';
+      } else if (match[2]) {
+        // Single/double quoted string
+        result += '<span class="str">' + match[2] + '</span>';
+      } else if (match[3]) {
+        // Comment
+        result += '<span class="cmt">' + match[3] + '</span>';
+      } else if (match[4]) {
+        // Number
+        result += '<span class="num">' + match[4] + '</span>';
+      } else if (match[5]) {
+        // Identifier or keyword
+        var word = match[5];
+        if (kwMap[word]) {
+          result += '<span class="kw">' + word + '</span>';
+        } else if (word === 'self') {
+          result += '<span class="var">' + word + '</span>';
+        } else {
+          // Check if followed by '(' for function call
+          var afterIdx = masterRe.lastIndex;
+          var nextChar = text.charAt(afterIdx);
+          // Skip whitespace to find next non-whitespace
+          while (nextChar === ' ' || nextChar === '\t' || nextChar === '\n' || nextChar === '\r') {
+            afterIdx++;
+            nextChar = text.charAt(afterIdx);
+          }
+          if (nextChar === '(') {
+            result += '<span class="fn">' + word + '</span>';
+          } else {
+            result += word;
+          }
+        }
+      } else if (match[6]) {
+        // Everything else
+        result += match[6];
+      }
+    }
 
-    // 2. Extract single-line comments
-    text = text.replace(/(#[^\n]*)/g, function(m) {
-      placeholders.push('<span class="cmt">' + m + '</span>');
-      return '\x00' + (placeholders.length - 1) + '\x00';
-    });
-
-    // 3. Extract single/double quoted strings
-    text = text.replace(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')/g, function(m) {
-      placeholders.push('<span class="str">' + m + '</span>');
-      return '\x00' + (placeholders.length - 1) + '\x00';
-    });
-
-    // 4. Now apply keyword highlighting on remaining text (strings/comments are placeholders)
-    var kwPattern = new RegExp('\\b(' + keywords.join('|') + ')\\b', 'g');
-    text = text.replace(kwPattern, '<span class="kw">$1</span>');
-
-    // 5. Numbers
-    text = text.replace(/\b(\d+\.?\d*)\b/g, '<span class="num">$1</span>');
-
-    // 6. Self
-    text = text.replace(/\b(self)\b/g, '<span class="var">$1</span>');
-
-    // 7. Restore placeholders (strings and comments)
-    text = text.replace(/\x00(\d+)\x00/g, function(m, idx) {
-      return placeholders[parseInt(idx, 10)];
-    });
-
-    return text;
+    return result;
   }
 
-  // Apply highlighting to all code blocks
+  // Apply highlighting to all existing code blocks
   document.querySelectorAll('.code-block code').forEach(function(block) {
-    block.innerHTML = highlightCode(block);
+    if (!block.getAttribute('data-hl')) {
+      block.innerHTML = highlightCode(block);
+      block.setAttribute('data-hl', '1');
+    }
   });
 
-  // Also highlight code blocks that might be rendered dynamically later
-  // Use a MutationObserver to catch dynamically added code blocks
+  // Watch for dynamically added code blocks (quiz page etc.)
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       mutation.addedNodes.forEach(function(node) {
         if (node.nodeType !== 1) return;
-        var codeBlocks = node.querySelectorAll ? node.querySelectorAll('.code-block code') : [];
-        codeBlocks.forEach(function(block) {
-          if (!block.getAttribute('data-highlighted')) {
+        var blocks = node.querySelectorAll ? node.querySelectorAll('.code-block code') : [];
+        blocks.forEach(function(block) {
+          if (!block.getAttribute('data-hl')) {
             block.innerHTML = highlightCode(block);
-            block.setAttribute('data-highlighted', 'true');
+            block.setAttribute('data-hl', '1');
           }
         });
+        // Also check if the node itself is a code block
+        if (node.classList && node.classList.contains('code-block')) {
+          var code = node.querySelector('code');
+          if (code && !code.getAttribute('data-hl')) {
+            code.innerHTML = highlightCode(code);
+            code.setAttribute('data-hl', '1');
+          }
+        }
       });
     });
   });
