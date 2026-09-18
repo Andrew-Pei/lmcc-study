@@ -5,7 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LMCC 大模型编程认证 - 学习中心</title>
   <meta name="description" content="LMCC大模型编程认证备考学习网站，从Python基础到第二轮编程实践，系统备考">
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=5">
+  <style>
+    .countdown-hero {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: linear-gradient(135deg, #1e3a5f, #2d1b4e);
+      border-radius: 16px;
+      margin: 1rem 0 2rem;
+    }
+    .countdown-hero .countdown-number {
+      font-size: 5rem;
+      font-weight: 900;
+      color: #f97316;
+      line-height: 1;
+      margin: 0.5rem 0;
+      text-shadow: 0 0 30px rgba(249, 115, 22, 0.4);
+    }
+    .countdown-hero .countdown-label {
+      font-size: 1.5rem;
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+    .countdown-hero .countdown-sub {
+      font-size: 1rem;
+      color: #94a3b8;
+      margin-top: 0.5rem;
+    }
+  </style>
 </head>
 <body>
   <!-- Navigation -->
@@ -31,13 +58,14 @@
         <div class="hero-content">
           <h1>LMCC 大模型编程认证</h1>
           <p class="subtitle">从Python基础到第二轮编程实践，系统备考至10月17日</p>
-          <div class="hero-badges">
-            <span class="hero-badge" id="countdown-badge">距考试 0 天</span>
-            <span class="hero-badge">Python</span>
-            <span class="hero-badge">PyTorch</span>
-            <span class="hero-badge">Transformer</span>
-            <span class="hero-badge">提示词工程</span>
+
+          <!-- Countdown -->
+          <div class="countdown-hero">
+            <div class="countdown-label">距第二轮考试</div>
+            <div class="countdown-number" id="countdown-number">29</div>
+            <div class="countdown-sub" id="countdown-sub">天 | 2026年10月17日</div>
           </div>
+
           <div class="hero-cta">
             <a href="resources.html" class="btn btn-primary">开始学习</a>
             <a href="plan.html" class="btn btn-outline">查看备考计划</a>
@@ -46,12 +74,12 @@
       </div>
     </section>
 
-    <!-- Five Modules -->
+    <!-- Four Modules -->
     <section>
       <div class="container">
         <div class="section-header">
           <div class="eyebrow">网站模块</div>
-          <h2>五大学习模块</h2>
+          <h2>四大学习模块</h2>
           <p>按学习路径组织，从基础知识到真题演练</p>
         </div>
         <div class="cards-grid">
@@ -100,17 +128,6 @@
             </div>
             <a href="plan.html" class="card-link">查看计划</a>
           </div>
-
-          <div class="card">
-            <div class="card-icon cyan">5</div>
-            <h3>首页导航</h3>
-            <p>网站总览，快速了解备考路径和各模块内容。提供考试结构说明和技术栈参考。</p>
-            <div>
-              <span class="tag cyan">总览</span>
-              <span class="tag cyan">导航</span>
-            </div>
-            <a href="#exam-structure" class="card-link">考试说明</a>
-          </div>
         </div>
       </div>
     </section>
@@ -124,12 +141,8 @@
         </div>
         <div class="cards-grid">
           <div class="card text-center">
-            <h3 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem;">60<span style="font-size: 1rem; color: var(--text-secondary);">分</span></h3>
-            <p>第一轮单选题<br>20题 × 3分</p>
-          </div>
-          <div class="card text-center">
-            <h3 style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 0.5rem;">40<span style="font-size: 1rem; color: var(--text-secondary);">分</span></h3>
-            <p>第一轮程序题<br>10题 × 4分</p>
+            <h3 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem;">100<span style="font-size: 1rem; color: var(--text-secondary);">分</span></h3>
+            <p>第一轮认证<br>单选题20题×3分 + 程序题10题×4分</p>
           </div>
           <div class="card text-center">
             <h3 style="font-size: 2.5rem; color: var(--accent); margin-bottom: 0.5rem;">100<span style="font-size: 1rem; color: var(--text-secondary);">分</span></h3>
@@ -138,62 +151,6 @@
           <div class="card text-center">
             <h3 style="font-size: 2.5rem; color: var(--success); margin-bottom: 0.5rem;">10.17<span style="font-size: 1rem; color: var(--text-secondary);">考试</span></h3>
             <p>第二轮考试日期<br>距今约4周</p>
-          </div>
-        </div>
-
-        <div class="info-box info mt-4">
-          <span class="icon">i</span>
-          <div class="content">
-            <strong>同学们已通过第一轮认证</strong>
-            <p>当前备考重点在第二轮编程实践：T1 小小数学助手（System Prompt + 模型推理）和 T2 多样性数据生成与相似度计算（Embedding + 余弦相似度 + 数据集生成）。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tech Stack -->
-    <section style="background: #1e293b; color: white;">
-      <div class="container">
-        <div class="section-header">
-          <div class="eyebrow" style="color: var(--primary-light);">技术栈</div>
-          <h2 style="color: white;">你需要掌握的工具</h2>
-        </div>
-        <div class="cards-grid">
-          <div class="card" style="background: #334155; border-color: #475569;">
-            <div class="card-icon orange">Py</div>
-            <h3 style="color: white;">Python</h3>
-            <p style="color: #94a3b8;">编程语言基础。重点：数据类型、函数、类、文件操作、JSON处理、正则表达式。</p>
-            <div>
-              <span class="tag orange">基础语法</span>
-              <span class="tag orange">文件操作</span>
-            </div>
-          </div>
-          <div class="card" style="background: #334155; border-color: #475569;">
-            <div class="card-icon blue">PT</div>
-            <h3 style="color: white;">PyTorch</h3>
-            <p style="color: #94a3b8;">深度学习框架。重点：Tensor操作、model加载与推理、torch.no_grad、F.normalize。</p>
-            <div>
-              <span class="tag blue">Tensor</span>
-              <span class="tag blue">generate</span>
-            </div>
-          </div>
-          <div class="card" style="background: #334155; border-color: #475569;">
-            <div class="card-icon purple">TF</div>
-            <h3 style="color: white;">Transformers</h3>
-            <p style="color: #94a3b8;">Hugging Face库。重点：AutoTokenizer、AutoModel、apply_chat_template、模型推理。</p>
-            <div>
-              <span class="tag purple">Tokenizer</span>
-              <span class="tag purple">ChatTemplate</span>
-            </div>
-          </div>
-          <div class="card" style="background: #334155; border-color: #475569;">
-            <div class="card-icon green">Qwen</div>
-            <h3 style="color: white;">Qwen3 模型</h3>
-            <p style="color: #94a3b8;">考试使用模型。T1用Qwen3-0.6B（CausalLM），T2用Qwen3-Embedding-0.6B。</p>
-            <div>
-              <span class="tag green">0.6B</span>
-              <span class="tag green">Thinking</span>
-            </div>
           </div>
         </div>
       </div>
@@ -229,21 +186,24 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=4"></script>
+  <script src="js/main.js?v=5"></script>
   <script>
-    // Countdown to Oct 17
     (function() {
       var examDate = new Date('2026-10-17T00:00:00+08:00');
       var now = new Date();
       var diff = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
-      var badge = document.getElementById('countdown-badge');
-      if (badge) {
+      var numEl = document.getElementById('countdown-number');
+      var subEl = document.getElementById('countdown-sub');
+      if (numEl) {
         if (diff > 0) {
-          badge.textContent = '距考试 ' + diff + ' 天';
+          numEl.textContent = diff;
+          if (subEl) subEl.textContent = '天 | 2026年10月17日';
         } else if (diff === 0) {
-          badge.textContent = '今天考试！';
+          numEl.textContent = '今天！';
+          if (subEl) subEl.textContent = '考试日到了，加油！';
         } else {
-          badge.textContent = '考试已结束';
+          numEl.textContent = '已结束';
+          if (subEl) subEl.textContent = '考试已结束';
         }
       }
     })();
