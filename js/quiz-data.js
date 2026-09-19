@@ -1,7 +1,7 @@
 // LMCC Quiz Data - organized by learning module
 // Note: Use Chinese quotes inside strings to avoid JS syntax errors
 const QUIZ_DATA = {
-  // ===== Python基础 =====
+  // ===== Python基础 (25题) =====
   python: [
     {
       id: 1,
@@ -162,10 +162,105 @@ const QUIZ_DATA = {
       options: { A: 'True', B: 'False', C: '42', D: '报错' },
       answer: 'A',
       explanation: '42是int类型，isinstance()返回True。isinstance()比type() == int更灵活，因为它考虑了继承关系。'
+    },
+    {
+      id: 16,
+      question: '以下代码输出什么？\nprint("{}".format("hello"))',
+      options: { A: 'hello', B: '{}', C: '报错', D: 'None' },
+      answer: 'A',
+      explanation: 'str.format()方法用参数替换花括号占位符。"{}".format("hello")将"hello"填入{}中，输出"hello"。'
+    },
+    {
+      id: 17,
+      question: '在Python中，以下哪种方式可以将列表反转？',
+      options: {
+        A: 'list.reverse()',
+        B: 'list[::-1]',
+        C: 'reversed(list)',
+        D: 'All of the above can work'
+      },
+      answer: 'D',
+      explanation: 'list.reverse()原地反转（返回None），list[::-1]创建反转副本，reversed(list)返回迭代器。三者都能实现反转，但行为不同。'
+    },
+    {
+      id: 18,
+      question: '以下代码输出什么？\na = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)',
+      options: { A: '[1, 2, 3]', B: '[1, 2, 3, 4]', C: '[4, 1, 2, 3]', D: '报错' },
+      answer: 'B',
+      explanation: 'a和b指向同一个列表对象。对b的修改也会影响a。如果需要独立副本，应使用b = a.copy()或b = a[:]。'
+    },
+    {
+      id: 19,
+      question: 'Python中，以下哪种方式可以正确处理文件编码读取中文？',
+      options: {
+        A: 'open("file.txt", encoding="utf-8")',
+        B: 'open("file.txt", "r")',
+        C: 'open("file.txt", "r", "utf-8")',
+        D: 'open("file.txt", mode="r", enc="utf-8")'
+      },
+      answer: 'A',
+      explanation: 'encoding参数指定文件编码。在Windows上不指定编码可能默认使用GBK，导致读取UTF-8编码的中文文件出现乱码。'
+    },
+    {
+      id: 20,
+      question: '以下代码输出什么？\nprint([x for x in range(10) if x % 2 == 0])',
+      options: { A: '[2, 4, 6, 8]', B: '[0, 2, 4, 6, 8]', C: '[1, 3, 5, 7, 9]', D: '[0, 1, 2, 3, 4]' },
+      answer: 'B',
+      explanation: '列表推导式带条件过滤。range(10)生成0-9，过滤偶数得到0,2,4,6,8。注意0也是偶数。'
+    },
+    {
+      id: 21,
+      question: '在Python中，try-except-finally中finally块什么时候执行？',
+      options: {
+        A: '只在发生异常时执行',
+        B: '只在没有异常时执行',
+        C: '无论是否发生异常都会执行',
+        D: '在return之前不执行'
+      },
+      answer: 'C',
+      explanation: 'finally块无论是否发生异常、是否return都会执行。常用于资源清理，如关闭文件或数据库连接。'
+    },
+    {
+      id: 22,
+      question: '以下代码输出什么？\nprint(type([]) == list)',
+      options: { A: 'True', B: 'False', C: '报错', D: 'None' },
+      answer: 'A',
+      explanation: 'type([])返回list类型，与list比较相等。也可以用isinstance([], list)来判断，后者更Pythonic。'
+    },
+    {
+      id: 23,
+      question: '在Python中，*args和**kwargs的区别是什么？',
+      options: {
+        A: '*args接收关键字参数，**kwargs接收位置参数',
+        B: '*args接收位置参数（元组），**kwargs接收关键字参数（字典）',
+        C: '两者没有区别',
+        D: '*args只能在类中使用'
+      },
+      answer: 'B',
+      explanation: '*args收集多余的位置参数为元组，**kwargs收集多余的关键字参数为字典。args和kwargs只是约定名称，*和**才是关键。'
+    },
+    {
+      id: 24,
+      question: '以下代码输出什么？\ns = "abc"\nprint(s * 3)',
+      options: { A: 'abcabcabc', B: 'abc3', C: '报错', D: 'aaaaaaaaaa' },
+      answer: 'A',
+      explanation: '字符串乘法将字符串重复指定次数。"abc" * 3 = "abcabcabc"。列表也支持类似操作：[1,2] * 3 = [1,2,1,2,1,2]。'
+    },
+    {
+      id: 25,
+      question: '在Python中，以下哪种方式可以安全地获取字典中不存在的键的值？',
+      options: {
+        A: 'd["key"]',
+        B: 'd.get("key", default_value)',
+        C: 'd.key',
+        D: 'd["key"] or default_value'
+      },
+      answer: 'B',
+      explanation: 'd.get("key", default)在键不存在时返回default而不报错。d["key"]在键不存在时会抛出KeyError。这是处理可选键的安全方式。'
     }
   ],
 
-  // ===== PyTorch基础 =====
+  // ===== PyTorch基础 (25题) =====
   pytorch: [
     {
       id: 1,
@@ -267,7 +362,7 @@ const QUIZ_DATA = {
       id: 9,
       question: 'tensor.unsqueeze(-1)的作用是什么？',
       options: {
-        A: '在最后添加一个维度，如(B, L, D) → (B, L, D, 1)',
+        A: '在最后添加一个维度，如(B, L, D) 变为 (B, L, D, 1)',
         B: '移除最后一个维度',
         C: '转置最后两个维度',
         D: '将tensor展平'
@@ -303,7 +398,7 @@ const QUIZ_DATA = {
       id: 12,
       question: '在PyTorch中，tensor.squeeze(0)的作用是什么？',
       options: {
-        A: '移除第0个大小为1的维度，如(1, D) → (D,)',
+        A: '移除第0个大小为1的维度，如(1, D) 变为 (D,)',
         B: '删除第0行',
         C: '在第0个位置插入一个维度',
         D: '压缩整个tensor'
@@ -346,10 +441,120 @@ const QUIZ_DATA = {
       },
       answer: 'A',
       explanation: 'torch.arange(n)生成0到n-1的整数序列。device参数确保生成的tensor在正确的设备上。在last-token pooling中用于按索引提取每个样本的最后一个有效token。'
+    },
+    {
+      id: 16,
+      question: '在PyTorch中，torch.tensor([1, 2, 3])创建的tensor默认是什么数据类型？',
+      options: { A: 'torch.float32', B: 'torch.int64', C: 'torch.float16', D: 'torch.int32' },
+      answer: 'B',
+      explanation: '从整数列表创建的tensor默认是int64。如果需要float类型，可以用torch.tensor([1.0, 2.0, 3.0])或torch.tensor([1, 2, 3], dtype=torch.float32)。'
+    },
+    {
+      id: 17,
+      question: '在PyTorch中，tensor.dim()的作用是什么？',
+      options: {
+        A: '返回tensor的维度数（rank）',
+        B: '返回tensor的形状',
+        C: '返回tensor的元素个数',
+        D: '返回tensor的数据类型'
+      },
+      answer: 'A',
+      explanation: 'tensor.dim()返回tensor的维度数（rank）。如torch.zeros(3, 4, 5).dim()返回3。tensor.shape或tensor.size()返回具体形状。'
+    },
+    {
+      id: 18,
+      question: '在PyTorch中，tensor.shape[0]通常表示什么？',
+      options: {
+        A: '序列长度',
+        B: 'batch size',
+        C: '隐藏层维度',
+        D: '取决于tensor的具体含义'
+      },
+      answer: 'D',
+      explanation: 'tensor.shape[0]是第一个维度的大小，具体含义取决于tensor的约定。在深度学习中通常是batch size，但也可能是序列长度或其他维度。'
+    },
+    {
+      id: 19,
+      question: '在PyTorch中，@运算符等价于哪个函数？',
+      options: { A: 'torch.mul()', B: 'torch.matmul()', C: 'torch.dot()', D: 'torch.mm()' },
+      answer: 'B',
+      explanation: '@运算符是torch.matmul()的简写，用于矩阵乘法。a @ b等价于torch.matmul(a, b)。在T2相似度计算中常用：embeddings[0] @ embeddings[1]。'
+    },
+    {
+      id: 20,
+      question: 'tensor.item()的作用是什么？',
+      options: {
+        A: '返回tensor中所有元素',
+        B: '将单元素tensor转换为Python标量',
+        C: '获取tensor的第0个元素',
+        D: '将tensor转换为列表'
+      },
+      answer: 'B',
+      explanation: 'tensor.item()只能用于单元素tensor，将其转换为Python标量。在T2中常用：similarity = (emb1 @ emb2).item()将相似度从tensor转为float。'
+    },
+    {
+      id: 21,
+      question: '在PyTorch中，model.eval()的作用是什么？',
+      options: {
+        A: '评估模型性能',
+        B: '将模型设置为评估模式，关闭Dropout和BatchNorm更新',
+        C: '删除模型参数',
+        D: '导出模型'
+      },
+      answer: 'B',
+      explanation: 'model.eval()将模型设为评估模式，关闭Dropout、冻结BatchNorm统计量。推理前应调用model.eval()，配合torch.no_grad()使用。'
+    },
+    {
+      id: 22,
+      question: '在PyTorch中，torch.cat([a, b], dim=0)的作用是什么？',
+      options: {
+        A: '沿dim=0拼接两个tensor',
+        B: '沿dim=0相加两个tensor',
+        C: '堆叠两个tensor创建新维度',
+        D: '比较两个tensor'
+      },
+      answer: 'A',
+      explanation: 'torch.cat沿指定维度拼接tensor。dim=0沿batch维度拼接，dim=1沿特征维度拼接。注意cat在已有维度上拼接，stack创建新维度。'
+    },
+    {
+      id: 23,
+      question: '在PyTorch中，如何获取tensor的形状？',
+      options: {
+        A: 'tensor.shape',
+        B: 'tensor.size()',
+        C: 'Both A and B',
+        D: 'tensor.dimensions()'
+      },
+      answer: 'C',
+      explanation: 'tensor.shape和tensor.size()都返回tensor的形状。tensor.shape是torch.Size类型（类似元组），可以索引访问如tensor.shape[0]。'
+    },
+    {
+      id: 24,
+      question: '在PyTorch中，masked_fill(mask, value)的作用是什么？',
+      options: {
+        A: '将mask为True的位置填充value',
+        B: '将mask为False的位置填充value',
+        C: '移除mask为True的位置',
+        D: '复制mask指定的位置'
+      },
+      answer: 'A',
+      explanation: 'masked_fill(mask, value)将mask中为True的位置替换为value。在注意力中常用masked_fill(mask==0, float("-inf"))屏蔽padding位置。'
+    },
+    {
+      id: 25,
+      question: '在PyTorch中，model.parameters()返回什么？',
+      options: {
+        A: '模型的配置参数字典',
+        B: '模型所有可学习参数的生成器',
+        C: '模型的超参数',
+        D: '模型的层列表'
+      },
+      answer: 'B',
+      explanation: 'model.parameters()返回模型所有可学习参数的生成器。常用next(model.parameters()).device获取模型设备，或用于优化器初始化。'
     }
   ],
 
-  // ===== Transformer基础 =====
+  // ===== Transformer基础 (25题) =====
   transformer: [
     {
       id: 1,
@@ -450,12 +655,7 @@ const QUIZ_DATA = {
     {
       id: 9,
       question: '在因果掩码（causal mask）中，被mask的位置（不可见位置）通常填充什么值？',
-      options: {
-        A: '0',
-        B: '1',
-        C: '负无穷（-inf）',
-        D: 'NaN'
-      },
+      options: { A: '0', B: '1', C: '负无穷（-inf）', D: 'NaN' },
       answer: 'C',
       explanation: '被mask的位置填充负无穷，经过softmax后这些位置的权重变为0，确保模型不会"看到"未来的token。用masked_fill(mask==0, float("-inf"))实现。'
     },
@@ -474,12 +674,7 @@ const QUIZ_DATA = {
     {
       id: 11,
       question: '在第一轮理论题中，GPT系列采用的Transformer架构是？',
-      options: {
-        A: '编码器（Encoder）',
-        B: '解码器（Decoder）',
-        C: '编码器-解码器',
-        D: '卷积神经网络'
-      },
+      options: { A: '编码器（Encoder）', B: '解码器（Decoder）', C: '编码器-解码器', D: '卷积神经网络' },
       answer: 'B',
       explanation: 'GPT系列采用纯解码器（Decoder-only）架构，通过自回归方式逐token生成文本。编码器（BERT）用于理解任务，编码器-解码器（T5）用于翻译等。'
     },
@@ -530,10 +725,130 @@ const QUIZ_DATA = {
       },
       answer: 'B',
       explanation: 'enable_thinking=True让Qwen3模型在think标签内进行推理，然后输出最终答案。评测程序会自动移除思考内容只提取答案。这能显著提高复杂计算任务的准确性。'
+    },
+    {
+      id: 16,
+      question: '在Transformer中，位置编码的作用是什么？',
+      options: {
+        A: '加速训练',
+        B: '让模型知道序列中token的顺序信息',
+        C: '减少参数量',
+        D: '归一化输入'
+      },
+      answer: 'B',
+      explanation: '由于自注意力机制本身是排列不变的（不考虑顺序），需要位置编码注入序列顺序信息。Transformer使用正弦/余弦或可学习的位置编码。'
+    },
+    {
+      id: 17,
+      question: '在Transformer中，多头注意力的"多头"指的是什么？',
+      options: {
+        A: '多个输入序列',
+        B: '将QKV投影到多个不同的子空间并行计算注意力',
+        C: '多个Transformer层堆叠',
+        D: '多个输出头'
+      },
+      answer: 'B',
+      explanation: '多头注意力将QKV投影到h个不同的子空间，每个子空间独立计算注意力，然后拼接。这让模型能同时关注不同位置的不同方面信息。'
+    },
+    {
+      id: 18,
+      question: '在Transformers库中，return_tensors="pt"返回什么类型的输入？',
+      options: {
+        A: 'Python列表',
+        B: 'NumPy数组',
+        C: 'PyTorch tensor',
+        D: 'JSON对象'
+      },
+      answer: 'C',
+      explanation: 'return_tensors="pt"返回PyTorch tensor。"np"返回NumPy数组，不指定返回普通Python列表。考试中需要将输入转为PyTorch tensor再送入模型。'
+    },
+    {
+      id: 19,
+      question: '在Transformer的残差连接中，输出的计算方式是？',
+      options: {
+        A: 'output = layer(x)',
+        B: 'output = x + layer(x)',
+        C: 'output = x * layer(x)',
+        D: 'output = layer(x) - x'
+      },
+      answer: 'B',
+      explanation: '残差连接将输入直接加到子层输出上：output = x + Sublayer(x)。这缓解了深层网络的梯度消失问题，使训练更稳定。'
+    },
+    {
+      id: 20,
+      question: 'LayerNorm在Transformer中的作用是什么？',
+      options: {
+        A: '加速计算',
+        B: '对每个样本的特征维度做归一化，稳定训练',
+        C: '减少参数量',
+        D: '增加非线性'
+      },
+      answer: 'B',
+      explanation: 'LayerNorm对每个样本沿特征维度归一化（均值为0方差为1），不同于BatchNorm沿batch维度。它稳定了深层Transformer的训练。'
+    },
+    {
+      id: 21,
+      question: '在Transformers库中，tokenizer.truncation=True的作用是？',
+      options: {
+        A: '截断输入序列到模型最大长度',
+        B: '截断输出序列',
+        C: '移除特殊token',
+        D: '压缩文本'
+      },
+      answer: 'A',
+      explanation: 'truncation=True将超过模型最大长度的输入序列截断。max_length参数控制最大长度。不设置可能导致输入过长报错。'
+    },
+    {
+      id: 22,
+      question: '在Transformer中，前馈网络（FFN）通常包含什么？',
+      options: {
+        A: '一个线性层',
+        B: '两个线性层中间一个激活函数',
+        C: '卷积层',
+        D: '循环层'
+      },
+      answer: 'B',
+      explanation: 'FFN通常由两个线性变换和一个非线性激活组成：FFN(x) = W2 * activation(W1 * x + b1) + b2。它增加了模型的非线性表达能力。'
+    },
+    {
+      id: 23,
+      question: '在自注意力计算中，Q @ K^T的结果形状是？(Q和K形状均为(B, H, L, D))',
+      options: {
+        A: '(B, H, L, D)',
+        B: '(B, H, L, L)',
+        C: '(B, H, D, D)',
+        D: '(B, H, L, 1)'
+      },
+      answer: 'B',
+      explanation: 'Q @ K^T中Q是(B,H,L,D)，K^T是(B,H,D,L)，矩阵乘法结果为(B,H,L,L)。这表示每个位置对其他所有位置的注意力分数。'
+    },
+    {
+      id: 24,
+      question: '在Transformer解码器中，cross-attention的Q和KV分别来自哪里？',
+      options: {
+        A: 'Q来自解码器，KV来自编码器',
+        B: 'Q来自编码器，KV来自解码器',
+        C: 'QKV都来自解码器',
+        D: 'QKV都来自编码器'
+      },
+      answer: 'A',
+      explanation: 'cross-attention（交叉注意力）中Q来自解码器当前层，K和V来自编码器最后一层输出。这让解码器能"看到"编码器的输出。自注意力中QKV来自同一来源。'
+    },
+    {
+      id: 25,
+      question: '在Transformers库中，model.save_pretrained()保存的是什么？',
+      options: {
+        A: '模型代码',
+        B: '模型权重和配置文件',
+        C: '训练数据',
+        D: '分词器'
+      },
+      answer: 'B',
+      explanation: 'save_pretrained()保存模型权重（pytorch_model.bin或safetensors）和配置文件（config.json）。分词器需要用tokenizer.save_pretrained()单独保存。'
     }
   ],
 
-  // ===== 提示词工程 =====
+  // ===== 提示词工程 (25题) =====
   prompt: [
     {
       id: 1,
@@ -678,10 +993,161 @@ const QUIZ_DATA = {
       },
       answer: 'B',
       explanation: '好的提示词通过明确角色、受众、约束条件引导模型聚焦到高质量输出方向。不是越长越好，而是越精确越好。'
+    },
+    {
+      id: 13,
+      question: '少样本提示（Few-shot Prompting）的核心思想是什么？',
+      options: {
+        A: '用少量训练数据微调模型',
+        B: '在Prompt中给出几个输入-输出示例，引导模型按示例格式输出',
+        C: '减少模型参数量',
+        D: '只用一个样本测试'
+      },
+      answer: 'B',
+      explanation: 'Few-shot prompting在Prompt中包含几个示例（如"问题→答案"对），让模型从示例中学习输出格式和规律，无需微调。'
+    },
+    {
+      id: 14,
+      question: '零样本提示（Zero-shot Prompting）与少样本提示的区别是？',
+      options: {
+        A: '零样本不给出任何示例',
+        B: '零样本使用更小的模型',
+        C: '零样本不输入任何文本',
+        D: '零样本效果一定更差'
+      },
+      answer: 'A',
+      explanation: 'Zero-shot prompting不给任何示例，直接让模型完成任务。Few-shot给出几个示例引导。对于简单任务零样本可能足够，复杂任务few-shot更可靠。'
+    },
+    {
+      id: 15,
+      question: '在Prompt中，"格式约束"为什么重要？',
+      options: {
+        A: '让输出更美观',
+        B: '确保模型输出可以被程序正确解析和评分',
+        C: '减少输出长度',
+        D: '提高模型推理速度'
+      },
+      answer: 'B',
+      explanation: '格式约束（如"[Answer]: 数值"）确保模型输出能被评测程序用正则匹配正确提取。格式不对会导致答案无法被解析，直接影响评分。'
+    },
+    {
+      id: 16,
+      question: '在第一轮中提到的RLHF（人类反馈强化学习），训练流程通常包含几个阶段？',
+      options: { A: '1个', B: '2个', C: '3个', D: '4个' },
+      answer: 'C',
+      explanation: 'RLHF通常包含三个阶段：1) SFT监督微调，2) 训练奖励模型，3) 用奖励模型通过PPO优化策略。这三个阶段让模型逐步对齐人类偏好。'
+    },
+    {
+      id: 17,
+      question: 'DPO（Direct Preference Optimization）相比RLHF的优势是什么？',
+      options: {
+        A: '效果更好',
+        B: '不需要训练奖励模型，直接用偏好数据优化',
+        C: '训练速度更慢',
+        D: '需要更多数据'
+      },
+      answer: 'B',
+      explanation: 'DPO跳过了训练奖励模型的步骤，直接用偏好对数据优化模型。相比RLHF流程更简单，但效果可能在某些任务上略有差距。'
+    },
+    {
+      id: 18,
+      question: '在T1中，为什么建议在System Prompt中列出所有符号变体？',
+      options: {
+        A: '让Prompt更长',
+        B: '确保模型能识别所有测试数据中的符号变体',
+        C: '增加模型推理时间',
+        D: '因为评测程序会检查Prompt内容'
+      },
+      answer: 'B',
+      explanation: '测试数据中包含多种符号变体。如果System Prompt没有列出某种变体，模型可能无法正确识别和转换，导致计算错误。'
+    },
+    {
+      id: 19,
+      question: '在第一轮理论题中，LoRA微调的主要优势是什么？',
+      options: {
+        A: '完全替代全参数微调',
+        B: '通过低秩分解大幅减少可训练参数，节省显存',
+        C: '提高模型精度',
+        D: '不需要训练数据'
+      },
+      answer: 'B',
+      explanation: 'LoRA将权重更新分解为两个低秩矩阵的乘积，大幅减少可训练参数。相比全参数微调，LoRA显著节省显存和训练时间，同时保持接近的效果。'
+    },
+    {
+      id: 20,
+      question: '在Prompt设计中，"负面指令"（告诉模型不要做什么）的效果通常如何？',
+      options: {
+        A: '总是有效',
+        B: '不如正面指令（告诉模型应该做什么）可靠',
+        C: '完全无效',
+        D: '只在英文中有效'
+      },
+      answer: 'B',
+      explanation: '负面指令（如"不要输出小数"）不如正面指令（如"只输出整数"）可靠。模型有时会忽略"不要"的部分。建议优先用正面表述。'
+    },
+    {
+      id: 21,
+      question: '在T1考试中，apply_chat_template中messages列表的结构是什么？',
+      options: {
+        A: '[{"role": "system", "content": "..."}, {"role": "user", "content": "..."}]',
+        B: '["system: ...", "user: ..."]',
+        C: '{"system": "...", "user": "..."}',
+        D: '[("system", "..."), ("user", "...")]'
+      },
+      answer: 'A',
+      explanation: 'messages是一个列表，每个元素是包含role和content键的字典。role通常是system/user/assistant，content是对应的文本内容。'
+    },
+    {
+      id: 22,
+      question: '在第一轮中提到的RAG（检索增强生成），其核心流程是？',
+      options: {
+        A: '先生成再检索',
+        B: '先检索相关文档，再将检索结果拼入Prompt让模型生成',
+        C: '只检索不生成',
+        D: '只生成不检索'
+      },
+      answer: 'B',
+      explanation: 'RAG先用检索器找到与问题相关的文档片段，然后将这些片段作为上下文拼入Prompt，让模型基于检索内容生成答案。这缓解了模型的知识幻觉问题。'
+    },
+    {
+      id: 23,
+      question: '在T1中，enable_thinking=True时，模型输出的think标签内容会被评测程序如何处理？',
+      options: {
+        A: '计入答案内容',
+        B: '被自动移除，只提取think标签外的最终答案',
+        C: '导致评分扣分',
+        D: '不影响评分'
+      },
+      answer: 'B',
+      explanation: '评测程序会自动移除think标签内的推理过程，只提取标签外的最终答案。所以启用thinking模式不会影响评分，但能提高答案准确性。'
+    },
+    {
+      id: 24,
+      question: '在Prompt中，为什么建议明确告知模型"⊕就是普通加法+"？',
+      options: {
+        A: '因为模型不知道⊕的含义',
+        B: '因为模型可能将⊕理解为异或运算，需要明确纠正',
+        C: '因为⊕是特殊符号需要转义',
+        D: '因为评测程序会检查是否包含这句话'
+      },
+      answer: 'B',
+      explanation: '大模型从训练数据中可能学到了⊕表示XOR（异或）。在数学任务中⊕表示加法，必须明确告知模型以免计算错误。'
+    },
+    {
+      id: 25,
+      question: '在T1批量推理中，为什么需要正确处理padding？',
+      options: {
+        A: '加速推理',
+        B: '不同长度的输入需要padding到等长才能组成batch，同时需要attention_mask避免padding影响结果',
+        C: '减少显存使用',
+        D: '提高模型精度'
+      },
+      answer: 'B',
+      explanation: '批量推理要求所有输入等长，需要padding。但padding位置不是有效内容，必须通过attention_mask告诉模型忽略这些位置，否则会影响推理结果。'
     }
   ],
 
-  // ===== 第二轮知识点 =====
+  // ===== 第二轮知识点 (10题) =====
   round2: [
     {
       id: 1,

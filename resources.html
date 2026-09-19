@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>学习资源 - LMCC学习中心</title>
   <meta name="description" content="LMCC备考学习资源，按Python基础、PyTorch基础、Transformer基础、提示词工程分类">
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
-  <!-- Navigation -->
   <nav class="navbar">
     <a href="index.html" class="nav-brand">
       <span class="logo">L</span>
@@ -62,27 +61,15 @@
       <!-- Python -->
       <div class="content-section" id="python">
         <h2>Python基础</h2>
-        <p>Python是整个考试的基础语言。第二轮需要用Python调用PyTorch和Transformers库完成模型推理和数据处理。重点掌握以下核心知识点。</p>
+        <p>Python是整个考试的基础语言。第二轮需要用Python调用PyTorch和Transformers库完成模型推理和数据处理。</p>
 
-        <h3>核心知识点</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead><tr><th>知识点</th><th>说明</th><th>考试中的用途</th></tr></thead>
-            <tbody>
-              <tr><td>数据类型与运算</td><td>int, float, str, list, dict, set</td><td>处理测试数据、计算结果</td></tr>
-              <tr><td>字符串操作</td><td>replace, split, join, f-string</td><td>符号转换、答案提取</td></tr>
-              <tr><td>函数定义</td><td>def, 参数, 返回值, 类型标注</td><td>实现submission.py中的函数</td></tr>
-              <tr><td>类与对象</td><td>class, __init__, self, 方法</td><td>理解Retriever等评测类</td></tr>
-              <tr><td>文件操作</td><td>open, read, write, with语句</td><td>读取jsonl数据文件</td></tr>
-              <tr><td>JSON处理</td><td>json.loads, json.dumps</td><td>处理test_data和dataset</td></tr>
-              <tr><td>正则表达式</td><td>re.findall, re.sub, re.match</td><td>答案提取、符号替换</td></tr>
-              <tr><td>列表推导式</td><td>[x for x in ...]</td><td>批量处理数据</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>官方文档与学习资料</h3>
         <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon blue">WEB</div>
+            <h3>八中Python学习网站</h3>
+            <p>裴老师制作的Python基础学习网站，涵盖语法、数据类型、函数、文件操作等内容，适合零基础入门。</p>
+            <a href="https://andrew-pei.github.io/python-learning/" target="_blank" class="card-link">进入学习</a>
+          </div>
           <div class="card">
             <div class="card-icon blue">DOC</div>
             <h3>Python官方教程</h3>
@@ -95,45 +82,6 @@
             <p>json、re、os、pathlib等标准库API文档。</p>
             <a href="https://docs.python.org/zh-cn/3/library/" target="_blank" class="card-link">标准库文档</a>
           </div>
-          <div class="card">
-            <div class="card-icon blue">WEB</div>
-            <h3>我校Python学习网站</h3>
-            <p>裴老师制作的Python基础学习网站，涵盖语法、数据类型、函数、文件操作等内容。</p>
-            <a href="https://andrew-pei.github.io/python-learning/" target="_blank" class="card-link">进入学习</a>
-          </div>
-        </div>
-
-        <h3>推荐讲解视频</h3>
-        <div class="cards-grid">
-          <div class="card">
-            <div class="card-icon blue">B站</div>
-            <h3>【黑马程序员】Python入门教程</h3>
-            <p>完整Python基础教程，适合零基础入门。重点看：函数、类、文件操作、JSON处理章节。</p>
-            <a href="https://www.bilibili.com/video/BV1qW4y1a7fU" target="_blank" class="card-link">B站观看</a>
-          </div>
-        </div>
-
-        <h3>考试中的典型Python代码</h3>
-        <div class="code-block">
-          <div class="code-header"><span class="lang">Python</span><span>典型代码模式</span></div>
-          <pre><code># 1. 读取JSONL数据
-import json
-data = []
-with open("test_data.jsonl", "r", encoding="utf-8") as f:
-    for line in f:
-        data.append(json.loads(line))
-
-# 2. 字符串符号替换
-problem = "12 加 35"
-s = problem.replace("加", "+").replace("减", "-")
-
-# 3. 函数定义与类型标注
-def compute(problem: str) -> int:
-    result = eval(problem)
-    return int(result)
-
-# 4. 批量处理
-results = [compute(item["problem"]) for item in data]</code></pre>
         </div>
       </div>
 
@@ -173,12 +121,6 @@ results = [compute(item["problem"]) for item in data]</code></pre>
             <p>torch.nn, torch.nn.functional, torch.Tensor等完整API。</p>
             <a href="https://pytorch.org/docs/stable/" target="_blank" class="card-link">API文档</a>
           </div>
-          <div class="card">
-            <div class="card-icon orange">GEN</div>
-            <h3>generate()方法文档</h3>
-            <p>model.generate()的完整参数说明，T1考试核心API。</p>
-            <a href="https://huggingface.co/docs/transformers/main/en/main_classes/text_generation" target="_blank" class="card-link">生成文档</a>
-          </div>
         </div>
 
         <h3>推荐讲解视频</h3>
@@ -195,46 +137,6 @@ results = [compute(item["problem"]) for item in data]</code></pre>
             <p>系统讲解深度学习与PyTorch，质量极高。重点关注注意力机制章节。</p>
             <a href="https://www.bilibili.com/video/BV1if4y147hS" target="_blank" class="card-link">B站观看</a>
           </div>
-        </div>
-
-        <h3>考试中的典型PyTorch代码</h3>
-        <div class="code-block">
-          <div class="code-header"><span class="lang">Python</span><span>T1: 模型推理</span></div>
-          <pre><code># T1: 单条推理
-inputs = tokenizer(text, return_tensors="pt").to(model.device)
-with torch.no_grad():
-    outputs = model.generate(
-        input_ids=inputs["input_ids"],
-        attention_mask=inputs["attention_mask"],
-        max_new_tokens=512,
-        do_sample=False,
-        eos_token_id=tokenizer.eos_token_id,
-        pad_token_id=tokenizer.pad_token_id,
-    )
-# 截取新生成的token
-new_tokens = outputs[0][inputs["input_ids"].shape[1]:]
-answer = tokenizer.decode(new_tokens, skip_special_tokens=True)</code></pre>
-        </div>
-        <div class="code-block">
-          <div class="code-header"><span class="lang">Python</span><span>T2: Embedding与相似度</span></div>
-          <pre><code># T2: 计算文本相似度
-import torch.nn.functional as F
-
-inputs = tokenizer([text1, text2], padding=True, truncation=True, return_tensors="pt").to(model.device)
-with torch.no_grad():
-    outputs = model(**inputs)
-
-# Last-token pooling
-left_padding = (inputs["attention_mask"][:, -1].sum() == inputs["attention_mask"].shape[0])
-if left_padding:
-    embeddings = outputs.last_hidden_state[:, -1]
-else:
-    seq_lens = inputs["attention_mask"].sum(dim=1) - 1
-    embeddings = outputs.last_hidden_state[torch.arange(2), seq_lens]
-
-# L2归一化 + 余弦相似度
-embeddings = F.normalize(embeddings, p=2, dim=1)
-similarity = (embeddings[0] @ embeddings[1]).item()</code></pre>
         </div>
       </div>
 
@@ -322,22 +224,6 @@ similarity = (embeddings[0] @ embeddings[1]).item()</code></pre>
         <h2>提示词工程</h2>
         <p>提示词工程是T1考试的核心技能。好的System Prompt能让模型正确识别各种数学符号变体并按格式输出答案。同时第一轮理论题也大量考察提示词工程概念。</p>
 
-        <h3>核心知识点</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead><tr><th>知识点</th><th>说明</th><th>考试中的用途</th></tr></thead>
-            <tbody>
-              <tr><td>System Prompt</td><td>定义模型角色和行为规则</td><td>T1: build_system_prompt()</td></tr>
-              <tr><td>角色设定</td><td>明确模型身份"你是..."</td><td>引导模型聚焦任务</td></tr>
-              <tr><td>格式约束</td><td>严格要求输出格式</td><td>T1: [Answer]: 数值</td></tr>
-              <tr><td>思维链(CoT)</td><td>分步推理引导</td><td>提高数学计算准确性</td></tr>
-              <tr><td>符号映射</td><td>定义变体→标准的规则</td><td>T1: ⊕→+, 加→+</td></tr>
-              <tr><td>enable_thinking</td><td>Qwen3思考模式</td><td>模型先推理再输出</td></tr>
-              <tr><td>少样本提示</td><td>给出示例引导格式</td><td>第一轮理论题考点</td></tr>
-            </tbody>
-          </table>
-        </div>
-
         <h3>官方文档与学习资料</h3>
         <div class="cards-grid">
           <div class="card">
@@ -352,51 +238,16 @@ similarity = (embeddings[0] @ embeddings[1]).item()</code></pre>
             <p>开源中文Prompt工程教程，系统全面。</p>
             <a href="https://www.promptingguide.ai/zh" target="_blank" class="card-link">提示工程指南</a>
           </div>
-          <div class="card">
-            <div class="card-icon green">QWEN</div>
-            <h3>Qwen3 Prompt最佳实践</h3>
-            <p>Qwen官方推荐的Prompt写法和enable_thinking使用方法。</p>
-            <a href="https://huggingface.co/Qwen/Qwen3-0.6B#quickstart" target="_blank" class="card-link">Qwen指南</a>
-          </div>
         </div>
 
         <h3>推荐讲解视频</h3>
         <div class="cards-grid">
           <div class="card">
             <div class="card-icon green">B站</div>
-            <h3>【吴恩达】ChatGPT Prompt Engineering</h3>
-            <p>Andrew Ng的Prompt工程课，系统讲解提示词设计原则。有中文字幕。</p>
-            <a href="https://www.bilibili.com/video/BV1Bo4y1S5aQ" target="_blank" class="card-link">B站观看</a>
-          </div>
-          <div class="card">
-            <div class="card-icon green">B站</div>
             <h3>【李宏毅】生成式AI导论</h3>
             <p>台大李宏毅教授的AI课程，包含Prompt Engineering和LLM应用。</p>
             <a href="https://www.bilibili.com/video/BV1Wv411h7jN" target="_blank" class="card-link">B站观看</a>
           </div>
-        </div>
-
-        <h3>T1 System Prompt 设计示例</h3>
-        <div class="code-block">
-          <div class="code-header"><span class="lang">Python</span><span>build_system_prompt()</span></div>
-          <pre><code>def build_system_prompt() -> str:
-    return """你是一个精确的数学计算助手。请按照以下步骤严格计算并返回准确的最终数值。
-
-【计算步骤】
-步骤1 - 符号转换：
-   - ＋, ➕, ⊕, 加 → +
-   - －, 减 → -
-   - ×, *, 乘 → ×
-   - ÷, /, 除 → ÷
-   - ⊕ 不是异或运算，就是普通加法 +
-
-步骤2 - 分步计算：
-   - 按照运算优先级逐步计算
-
-步骤3 - 输出答案：
-   - 使用格式：[Answer]: 数值
-   - 整数直接输出，确保计算准确
-"""</code></pre>
         </div>
       </div>
 
@@ -426,7 +277,6 @@ similarity = (embeddings[0] @ embeddings[1]).item()</code></pre>
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
@@ -454,6 +304,6 @@ similarity = (embeddings[0] @ embeddings[1]).item()</code></pre>
     </div>
   </footer>
 
-  <script src="js/main.js?v=4"></script>
+  <script src="js/main.js?v=6"></script>
 </body>
 </html>
