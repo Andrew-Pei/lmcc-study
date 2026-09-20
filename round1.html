@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>第一轮备考 - LMCC学习中心</title>
-  <meta name="description" content="LMCC第一轮理论知识备考，含青少年组和成人组真题详解">
-  <link rel="stylesheet" href="css/style.css?v=7">
+  <title>第一轮真题 - LMCC学习中心</title>
+  <meta name="description" content="LMCC第一轮理论知识备考，青少年组真题详解">
+  <link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
-  <!-- Navigation -->
   <nav class="navbar">
     <a href="index.html" class="nav-brand">
       <span class="logo">L</span>
@@ -25,7 +24,6 @@
   </nav>
 
   <div class="main-content">
-    <!-- Page Header -->
     <div class="page-header">
       <div class="container">
         <h1>第一轮：理论知识</h1>
@@ -34,13 +32,12 @@
     </div>
 
     <div class="container">
-      <!-- Overview -->
       <div class="content-section">
         <div class="info-box info">
           <span class="icon">i</span>
           <div class="content">
             <strong>第一轮考试说明</strong>
-            <p>第一轮为理论知识考核，分为青少年组和成人组两套试卷。同学们已通过青少年组试卷，本页面提供青少年组和成人组的完整真题解析，帮助巩固和拓展知识。建议在备考第二轮前，确保所有知识点理解透彻。</p>
+            <p>第一轮为理论知识考核，同学们已通过青少年组试卷。本页面提供青少年组完整真题解析，帮助巩固知识，为第二轮编程实践打好基础。</p>
           </div>
         </div>
 
@@ -79,43 +76,20 @@
         </div>
       </div>
 
-      <!-- Tabs for Youth/Adult -->
+      <!-- Youth Group Only -->
       <div class="content-section">
-        <div class="tabs-container">
-          <div class="tabs">
-            <button class="tab active" data-tab="youth-tab">青少年组</button>
-            <button class="tab" data-tab="adult-tab">成人组</button>
-          </div>
+        <h2>青少年组真题</h2>
 
-          <!-- Youth Group -->
-          <div class="tab-panel active" id="youth-tab">
-            <h2>单选题（20题 × 3分 = 60分）</h2>
+        <h3>单选题（20题 × 3分 = 60分）</h3>
+        <h4>第一部分：大语言模型基础</h4>
+        <div id="youth-mcq-container"></div>
 
-            <!-- Q1-5: LLM Basics -->
-            <h3>第一部分：大语言模型基础</h3>
-            <div id="youth-mcq-container"></div>
+        <h3>程序题（10题 × 4分 = 40分）</h3>
+        <h4>一、检索增强生成（RAG）—— 5题</h4>
+        <div id="youth-prog-rag"></div>
 
-            <h2>程序题（10题 × 4分 = 40分）</h2>
-            <h3>一、检索增强生成（RAG）—— 5题</h3>
-            <div id="youth-prog-rag"></div>
-
-            <h3>二、参数高效微调（LoRA）—— 5题</h3>
-            <div id="youth-prog-lora"></div>
-          </div>
-
-          <!-- Adult Group -->
-          <div class="tab-panel" id="adult-tab">
-            <h2>单选题（20题 × 3分 = 60分）</h2>
-            <div id="adult-mcq-container"></div>
-
-            <h2>程序题（10题 × 4分 = 40分）</h2>
-            <h3>一、参数高效微调（LoRA）—— 5题</h3>
-            <div id="adult-prog-lora"></div>
-
-            <h3>二、分组查询注意力（GQA）—— 5题</h3>
-            <div id="adult-prog-gqa"></div>
-          </div>
-        </div>
+        <h4>二、参数高效微调（LoRA）—— 5题</h4>
+        <div id="youth-prog-lora"></div>
       </div>
 
       <!-- Key Concepts Summary -->
@@ -231,7 +205,6 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
@@ -258,7 +231,7 @@
     </div>
   </footer>
 
-  <script src="js/exam-data.js?v=7"></script>
+  <script src="js/exam-data.js?v=8"></script>
   <script>
     function renderQuestions(questions, containerId, startIdx, endIdx) {
       const container = document.getElementById(containerId);
@@ -292,24 +265,12 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-      // Youth MCQ (20 questions)
       renderQuestions(QUIZ_DATA.youth_mcq, 'youth-mcq-container', 0, 20);
-      // Youth Programming - RAG (Q21-25)
       renderQuestions(QUIZ_DATA.youth_prog, 'youth-prog-rag', 0, 5);
-      // Youth Programming - LoRA (Q26-30)
       renderQuestions(QUIZ_DATA.youth_prog, 'youth-prog-lora', 5, 10);
-      // Adult MCQ (20 questions)
-      renderQuestions(QUIZ_DATA.adult_mcq, 'adult-mcq-container', 0, 20);
-      // Adult Programming - LoRA (Q21-25)
-      renderQuestions(QUIZ_DATA.adult_prog, 'adult-prog-lora', 0, 5);
-      // Adult Programming - GQA (Q26-30)
-      renderQuestions(QUIZ_DATA.adult_prog, 'adult-prog-gqa', 5, 10);
     });
   </script>
-  <script src="js/main.js?v=7"></script>
+  <script src="js/main.js?v=8"></script>
 </body>
 </html>
-
-
-
 
