@@ -243,6 +243,17 @@ section { padding: 4rem 0; }
   gap: 1.5rem;
   margin-top: 2rem;
 }
+.cards-grid-2x2 {
+  grid-template-columns: repeat(2, 1fr) !important;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 640px) {
+  .cards-grid-2x2 {
+    grid-template-columns: 1fr !important;
+  }
+}
 .card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);

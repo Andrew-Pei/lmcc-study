@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>学习资源 - LMCC学习中心</title>
   <meta name="description" content="LMCC备考学习资源，按Python基础、PyTorch基础、Transformer基础、提示词工程分类">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
   <nav class="navbar">
@@ -34,7 +34,7 @@
     <div class="container">
       <!-- Quick Nav -->
       <div class="content-section">
-        <div class="cards-grid">
+        <div class="cards-grid cards-grid-2x2">
           <a href="#python" class="card" style="text-decoration: none;">
             <div class="card-icon blue">Py</div>
             <h3>Python基础</h3>
@@ -67,7 +67,7 @@
           <div class="card">
             <div class="card-icon blue">WEB</div>
             <h3>八中Python学习网站</h3>
-            <p>裴老师制作的Python基础学习网站，涵盖语法、数据类型、函数、文件操作等内容，适合零基础入门。</p>
+            <p>Python基础学习网站，涵盖语法、数据类型、函数、文件操作等内容，适合零基础入门。</p>
             <a href="https://andrew-pei.github.io/python-learning/" target="_blank" class="card-link">进入学习</a>
           </div>
           <div class="card">
@@ -99,7 +99,6 @@
               <tr><td>Tensor操作</td><td>matmul, transpose, sum, mean</td><td>注意力计算、相似度计算</td></tr>
               <tr><td>设备管理</td><td>.to(device), .cuda(), .cpu()</td><td>模型和输入移到GPU</td></tr>
               <tr><td>torch.no_grad()</td><td>禁用梯度计算</td><td>推理时节省显存</td></tr>
-              <tr><td>model.generate()</td><td>自回归文本生成</td><td>T1: 生成数学答案</td></tr>
               <tr><td>model(**inputs)</td><td>前向传播</td><td>T2: 获取Embedding向量</td></tr>
               <tr><td>F.normalize</td><td>L2归一化</td><td>T2: 余弦相似度计算</td></tr>
               <tr><td>softmax</td><td>注意力权重归一化</td><td>理解注意力机制</td></tr>
@@ -239,16 +238,6 @@
             <a href="https://www.promptingguide.ai/zh" target="_blank" class="card-link">提示工程指南</a>
           </div>
         </div>
-
-        <h3>推荐讲解视频</h3>
-        <div class="cards-grid">
-          <div class="card">
-            <div class="card-icon green">B站</div>
-            <h3>【李宏毅】生成式AI导论</h3>
-            <p>台大李宏毅教授的AI课程，包含Prompt Engineering和LLM应用。</p>
-            <a href="https://www.bilibili.com/video/BV1Wv411h7jN" target="_blank" class="card-link">B站观看</a>
-          </div>
-        </div>
       </div>
 
       <!-- Summary -->
@@ -304,6 +293,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=6"></script>
+  <script src="js/main.js?v=7"></script>
 </body>
 </html>
+

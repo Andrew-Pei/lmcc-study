@@ -10,7 +10,7 @@
     python:       { name: 'Python基础',       drawCount: 10 },
     pytorch:      { name: 'PyTorch基础',      drawCount: 10 },
     transformer:  { name: 'Transformer基础',  drawCount: 10 },
-    prompt:       { name: '提示词工程',        drawCount: 8 },
+    prompt:       { name: '提示词工程',        drawCount: 10 },
     round2:       { name: '第二轮知识点',      drawCount: 10 }
   };
 
