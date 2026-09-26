@@ -508,7 +508,9 @@ code.inline {
   background: #eff6ff;
   border-left: 4px solid var(--primary);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  display: none;
 }
+.answer-box.visible { display: block; }
 .answer-box .answer-label {
   font-weight: 700;
   color: var(--primary);
@@ -519,6 +521,33 @@ code.inline {
 }
 .answer-box .answer-text { color: var(--text-primary); font-size: 0.95rem; }
 .answer-box .explanation { color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem; }
+
+.toggle-answer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  margin-top: 0.5rem;
+  border: 1.5px solid var(--primary);
+  background: white;
+  color: var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.toggle-answer-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+.toggle-answer-btn .arrow {
+  display: inline-block;
+  transition: transform 0.2s;
+}
+.toggle-answer-btn.expanded .arrow {
+  transform: rotate(180deg);
+}
 
 /* ===== Info Boxes ===== */
 .info-box {

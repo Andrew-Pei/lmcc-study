@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>第一轮真题 - LMCC学习中心</title>
   <meta name="description" content="LMCC第一轮理论知识备考，青少年组真题详解">
-  <link rel="stylesheet" href="css/style.css?v=8">
+  <link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
   <nav class="navbar">
@@ -244,19 +244,39 @@
         if (q.code) {
           html += '<div class="code-block"><div class="code-header"><span class="lang">Python</span></div><pre><code>' + escapeHtml(q.code) + '</code></pre></div>';
         }
-        html += '<div class="options">';
+        html += '<div class="options" data-answer="' + q.answer + '">';
         for (const [key, value] of Object.entries(q.options)) {
-          if (key === q.answer) {
-            html += '<div class="option correct"><span class="opt-label">' + key + '.</span><span>' + escapeHtml(value) + '</span></div>';
-          } else {
-            html += '<div class="option"><span class="opt-label">' + key + '.</span><span>' + escapeHtml(value) + '</span></div>';
-          }
+          html += '<div class="option" data-key="' + key + '"><span class="opt-label">' + key + '.</span><span>' + escapeHtml(value) + '</span></div>';
         }
         html += '</div>';
+        html += '<button class="toggle-answer-btn" onclick="toggleAnswer(this)">查看答案与详解 <span class="arrow">&#9660;</span></button>';
         html += '<div class="answer-box"><div class="answer-label">答案: ' + q.answer + '</div><div class="explanation">' + escapeHtml(q.explanation) + '</div></div>';
         html += '</div>';
       }
       container.innerHTML = html;
+    }
+
+    function toggleAnswer(btn) {
+      var card = btn.closest('.question-card');
+      var answerBox = card.querySelector('.answer-box');
+      var options = card.querySelector('.options');
+      var answer = options.getAttribute('data-answer');
+      var expanded = answerBox.classList.contains('visible');
+
+      if (expanded) {
+        answerBox.classList.remove('visible');
+        options.querySelectorAll('.option').forEach(function(opt) {
+          opt.classList.remove('correct');
+        });
+        btn.classList.remove('expanded');
+        btn.innerHTML = '查看答案与详解 <span class="arrow">&#9660;</span>';
+      } else {
+        answerBox.classList.add('visible');
+        var correctOpt = options.querySelector('.option[data-key="' + answer + '"]');
+        if (correctOpt) correctOpt.classList.add('correct');
+        btn.classList.add('expanded');
+        btn.innerHTML = '收起答案 <span class="arrow">&#9660;</span>';
+      }
     }
 
     function escapeHtml(text) {
